@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.statutes.dao.lawsDao.StatuteDao">
+
+    <select id="getAllStatype" resultMap="staType">
+        select * from statutestype
+    </select>
+
+    <insert id="addSatatueType">
+        insert into statutestype values (null,#{statutestypeName})
+    </insert>
+
+    <delete id="delStatueTypeById">
+        delete from statutestype where statutestype_id=#{statutestypeId}
+    </delete>
+    <select id="getStatutesTypeById" resultMap="staType">
+        select * from statutestype where statutestype_id=#{statutestypeId}
+    </select>
+    <select id="getAllStaSplit" resultMap="staSplit">
+        select * from statutesplit where statp_id=#{statutestypeId}
+    </select>
+    <insert id="addStaSplit" parameterType="com.hd.statutes.model.entity.Statutesplit">
+        insert into statutesplit(statp_id, statutesplit_name) values (#{statpId},#{statutesplitName})
+    </insert>
+    <delete id="delStatueSplitById">
+        delete from statutesplit where statutesplit_id=#{statutesplitId}
+    </delete>
+    <insert id="addStatute" parameterType="com.hd.statutes.model.entity.Statute">
+        insert into statute(statp_id,stasp_id,statute_partno, statute_alias, statute_version, statute_name, statute_reveal, statute_iconpath, statute_pdf_name, statute_explain)
+        values (#{statpId},#{staspId},#{statutePartno},#{statuteAlias},#{statuteVersion},#{statuteName},#{statuteReveal},#{statuteIconpath},#{statutePdfName},#{statuteExplain})
+    </insert>
+    <select id="getAllStatutes" resultMap="statuteVO">
+        select stt.statutestype_name,sts.statutesplit_name,sta.* from statute sta left join statutesplit sts on sta.stasp_id=sts.statutesplit_id
+        left join statutestype stt on stt.statutestype_id=sts.statp_id
+            <where>
+                <if test="statutestypeId!=null and statutestypeId!=0">
+                   and stt.statutestype_id=#{statutestypeId}
+                </if>
+                <if test="statutesplitId!=null and statutesplitId!=0">
+                    and sts.statutesplit_id=#{statutesplitId}
+                </if>
+            </where>
+    </select>
+
+    <select id="getAllContentsByStatuteId" resultMap="Contents">
+        select * from contents
+        <where>
+            <if test="contentsLevel!=null and contentsLevel!=0">
+                and contents_level=#{contentsLevel}
+            </if>
+            <if test="conId!=null and conId!=0">
+                and con_id=#{conId}
+            </if>
+            <if test="staId!=null and staId!=0">
+                and sta_id=#{staId}
+            </if>
+            group by contents_serial
+        </where>
+    </select>
+    <insert id="addContents" parameterType="com.hd.statutes.model.entity.Contents">
+        insert into contents(contents_level,contents_name,contents_serial,sta_id,con_id)
+        values(#{contentsLevel},#{contentsName},#{contentsSerial},#{staId},#{conId})
+    </insert>
+    <select id="getContentsById" resultMap="Contents">
+        select * from contents where contents_id=#{contentsId}
+    </select>
+
+    <resultMap id="Contents" type="com.hd.statutes.model.entity.Contents">
+        <id property="contentsId" column="contents_id"></id>
+        <result property="contentsLevel" column="contents_level"></result>
+        <result property="contentsName" column="contents_name"></result>
+        <result property="contentsSerial" column="contents_serial"></result>
+        <result property="staId" column="sta_id"></result>
+        <result property="conId" column="con_id"></result>
+    </resultMap>
+
+    <resultMap id="statute" type="com.hd.statutes.model.entity.Statute">
+        <id property="statuteId" column="statute_id"></id>
+        <result property="statpId" column="statp_id"></result>
+        <result property="staspId" column="stasp_id"></result>
+        <result property="statutePartno" column="statute_partno"></result>
+        <result property="statuteAlias" column="statute_alias"></result>
+        <result property="statuteVersion" column="statute_version"></result>
+        <result property="statuteName" column="statute_name"></result>
+        <result property="statuteReveal" column="statute_reveal"></result>
+        <result property="statuteIconpath" column="statute_iconpath"></result>
+        <result property="statutePdfName" column="statute_pdf_name"></result>
+        <result property="statutePdfLink" column="statute_pdf_link"></result>
+        <result property="statuteExplain" column="statuteExplain"></result>
+    </resultMap>
+
+    <resultMap id="statuteVO" type="com.hd.statutes.model.vo.StatuteVO">
+        <id property="statuteId" column="statute_id"></id>
+        <result property="statutestypeName" column="statutestype_name"></result>
+        <result property="statutesplitName" column="statutesplit_name"></result>
+        <result property="statpId" column="statp_id"></result>
+        <result property="staspId" column="stasp_id"></result>
+        <result property="statutePartno" column="statute_partno"></result>
+        <result property="statuteAlias" column="statute_alias"></result>
+        <result property="statuteVersion" column="statute_version"></result>
+        <result property="statuteName" column="statute_name"></result>
+        <result property="statuteReveal" column="statute_reveal"></result>
+        <result property="statuteIconpath" column="statute_iconpath"></result>
+        <result property="statutePdfName" column="statute_pdf_name"></result>
+        <result property="statutePdfLink" column="statute_pdf_link"></result>
+        <result property="statuteExplain" column="statuteExplain"></result>
+    </resultMap>
+
+    <resultMap id="staType" type="com.hd.statutes.model.entity.Statutestype">
+        <id property="statutestypeId" column="statutestype_id"></id>
+        <result property="statutestypeName" column="statutestype_name"></result>
+    </resultMap>
+
+    <resultMap id="staSplit" type="com.hd.statutes.model.entity.Statutesplit">
+        <id property="statutesplitId" column="statutesplit_id"></id>
+        <result property="statpId" column="statp_id"></result>
+        <result property="statutesplitName" column="statutesplit_name"></result>
+    </resultMap>
+
+
+</mapper>

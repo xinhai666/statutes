@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hd.statutes.dao.usersDao.UsersDao">
+
+    <select id="getAllUsers" resultMap="Users">
+        select * from users
+    </select>
+    <select id="getAllConsultsByUserId" resultMap="Consults">
+        select * from consults
+        <where>
+            <if test="userId!=null and userId!=0">
+                and user_id=#{userId}
+            </if>
+        </where>
+    </select>
+    <select id="getConsultsById" resultMap="Consults">
+        select * from consults where consult_id=#{consultId}
+    </select>
+    <delete id="delConsultById">
+        delete from consults where consult_id=#{consultId}
+    </delete>
+
+    <insert id="addAdmin" parameterType="com.hd.statutes.model.entity.Admins">
+        insert into admins(admin_phone, admin_name,password, admin_createtime) values
+        (#{adminPhone},#{adminName},#{password},now())
+    </insert>
+    <select id="getAllAdmin" resultMap="admins">
+        select * from admins
+    </select>
+    <delete id="delAdminById">
+        delete from admins where admin_id=#{adminId}
+    </delete>
+
+    <resultMap id="admins" type="com.hd.statutes.model.entity.Admins">
+        <id property="adminId" column="admin_id"></id>
+        <result property="adminPhone" column="admin_phone"></result>
+        <result property="adminName" column="admin_name"></result>
+        <result property="password" column="password"></result>
+        <result property="adminCreatetime" column="admin_createtime"></result>
+    </resultMap>
+
+    <resultMap id="Consults" type="com.hd.statutes.model.entity.Consults">
+        <id property="consultId" column="consult_id"></id>
+        <result property="userId" column="user_id"></result>
+        <result property="consultUserName" column="consult_user_name"></result>
+        <result property="consultPhone" column="consult_phone"></result>
+        <result property="consultContent" column="consult_content"></result>
+        <result property="consultCreatetime" column="consult_createtime"></result>
+        <result property="consultWorkunit" column="consult_workunit"></result>
+        <result property="consultEmail" column="consult_email"></result>
+        <result property="consultWechat" column="consult_wechat"></result>
+        <result property="consultClauseNumbers" column="consult_clause_numbers"></result>
+    </resultMap>
+
+    <resultMap id="Users" type="com.hd.statutes.model.entity.Users">
+        <id property="userId" column="user_id"></id>
+        <result property="userName" column="user_name"></result>
+        <result property="userPhone" column="user_phone"></result>
+        <result property="userSex" column="user_sex"></result>
+        <result property="userMember" column="user_member"></result>
+        <result property="userCreatetime" column="user_createtime"></result>
+    </resultMap>
+</mapper>
