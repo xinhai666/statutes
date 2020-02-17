@@ -37,6 +37,23 @@
         update shortmessage set shortmessage_apikey=#{shortmessageApikey}
     </update>
 
+    <select id="getSites" resultMap="Sites">
+        select * from sites
+    </select>
+    <update id="updateSites" parameterType="com.hd.statutes.model.entity.Sites">
+        update sites set sites_email=#{sitesEmail},sites_language=#{sitesLanguage},sites_logo=#{sitesLogo},sites_org=#{sitesOrg},sites_status=#{sitesStatus},sites_title=#{sitesTitle}
+    </update>
+
+    <resultMap id="Sites" type="com.hd.statutes.model.entity.Sites">
+        <id property="sitesId" column="sites_id"></id>
+        <result property="sitesStatus" column="sites_status"></result>
+        <result property="sitesTitle" column="sites_title"></result>
+        <result property="sitesOrg" column="sites_org"></result>
+        <result property="sitesLogo" column="sites_logo"></result>
+        <result property="sitesEmail" column="sites_email"></result>
+        <result property="sitesLanguage" column="sites_language"></result>
+    </resultMap>
+
     <resultMap id="Shortmessage" type="com.hd.statutes.model.entity.Shortmessage">
         <id property="shortmessageId" column="shortmessage_id"></id>
         <result property="shortmessageApikey" column="shortmessage_apikey"></result>

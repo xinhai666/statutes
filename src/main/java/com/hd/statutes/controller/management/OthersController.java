@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hd.statutes.model.entity.Companyemail;
 import com.hd.statutes.model.entity.Opinions;
 import com.hd.statutes.model.entity.Shortmessage;
+import com.hd.statutes.model.entity.Sites;
 import com.hd.statutes.service.others.OthersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,6 +80,23 @@ public class OthersController {
     @ResponseBody
     public String updateShortmessage(Shortmessage shortmessage){
         int num=othersService.updateShortmessage(shortmessage);
+        if(num>0){
+            return "true";
+        }else {
+            return "false";
+        }
+    }
+    @GetMapping("getSites")
+    public String getSites(HttpServletRequest request){
+        Sites sites=othersService.getSites();
+        request.setAttribute("sites",sites);
+        return "system-base";
+    }
+
+    @PostMapping("updateSites")
+    @ResponseBody
+    public String updateSites(Sites sites){
+        int num=othersService.updateSites(sites);
         if(num>0){
             return "true";
         }else {

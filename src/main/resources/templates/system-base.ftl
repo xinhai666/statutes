@@ -33,14 +33,8 @@
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 <div class="page-container">
-	<form class="form form-horizontal" id="form-article-add">
+	<form class="form form-horizontal" id="form-article-add" method="post" enctype="multipart/form-data">
 		<div id="tab-system" class="HuiTab">
-			<!--<div class="tabBar cl">
-				<span>基本设置</span>
-				<span>安全设置</span>
-				<span>邮件设置</span>
-				<span>其他设置</span>
-			</div>-->
 			<div class="tabCon">
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2">
@@ -57,7 +51,7 @@
 						<span class="c-red">*</span>
 						网站标题：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" id="website-title" placeholder="不超过100字" value="" class="input-text">
+						<input type="text" id="sitesTitle" name="sitesTitle" placeholder="不超过100字" value="${sites.sitesTitle!}" class="input-text">
 					</div>
 				</div>
 				<div class="row cl">
@@ -65,7 +59,7 @@
 						<span class="c-red">*</span>
 						网站域名：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" id="website-Keywords" placeholder="不超过100字" value="" class="input-text">
+						<input type="text" id="sitesOrg" name="sitesOrg" placeholder="不超过100字" value="${sites.sitesOrg!}" class="input-text">
 					</div>
 				</div>
 				<div class="row cl">
@@ -73,7 +67,15 @@
 						<span class="c-red">*</span>
 						网站logo：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="file"  name="">
+						<input type="hidden" id="sitesLogo" name="sitesLogo" value="${sites.sitesLogo!}">
+						<#if (sites.sitesLogo)??>
+						<img id="logoImg" src="${sites.sitesLogo!}" alt="暂无" ; style="height:155px;width:209px;" />
+						<#else>
+						<img id="logoImg" src="image/file.png"; style="height:155px;width:209px;" />
+						</#if >
+						<#--<img id="logoImg" src="image/file.png"; style="height:155px;width:209px;" />-->
+						<input type="hidden" name="logotext" id="logotext" style="border:0px;height:30px;width:120px;" value="${sites.sitesLogo!}"/>
+						<input type="file" name="logofile" id="logofile" style="position:absolute;top:0;left:0px; height:155px;width:209px;filter:alpha(opacity:0);opacity: 0" onchange="document.getElementById('logotext').value=this.value" />
 					</div>
 				</div>
 				<div class="row cl">
@@ -81,7 +83,7 @@
 						<span class="c-red">*</span>
 						公司邮箱：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<input type="text" id="website-static" placeholder="不超过100字" value="" class="input-text">
+						<input type="text" id="sitesEmail" name="sitesEmail" placeholder="不超过100字" value="${sites.sitesEmail!}" class="input-text">
 					</div>
 				</div>
 				<div class="row cl">
@@ -89,7 +91,7 @@
 						<span class="c-red">*</span>
 						站点语言：</label>
 					<div class="formControls col-xs-8 col-sm-9">
-						<select name="">
+						<select name="sitesLanguage" id="sitesLanguage">
 							<option value="1">简体中文</option>
 						</select>
 					</div>
@@ -100,7 +102,6 @@
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
 				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
-				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
 			</div>
 		</div>
 	</form>
@@ -119,11 +120,63 @@
 <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript">
 $(function(){
+	//上传预览头像
+	$("#logofile").change(function () {
+		var fd=new FormData($("#form-article-add")[0]);
+		$.ajax({
+			type : "post",
+			url : "shangchuan",
+			data : fd,
+			contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+			processData: false,// 告诉jQuery不要去处理发送的数据
+			success : function(data) {
+				$("#logoImg").attr('src',data);
+				$("#sitesLogo").val(data);
+			},
+			error : function() {
+				layer.msg('操作失败!',{icon:1,time:1000});
+			}
+		});
+	})
+
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
+	//提交表单数据
+	$("#form-article-add").validate({
+		rules:{
+			sitesTitle:{
+				required:true,
+			},
+			sitesOrg:{
+				required:true,
+			},
+			sitesLg:{
+				required:true,
+			},
+			sitesEmail:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'post',
+				url: "updateSites",
+				success: function(data){
+					layer.msg('保存完成!',{icon:1,time:1000});
+				},
+				error: function(XmlHttpRequest, textStatus, errorThrown){
+					layer.msg('error!',{icon:1,time:1000});
+				}
+			});
+		}
+	});
+
 	$("#tab-system").Huitab({
 		index:0
 	});

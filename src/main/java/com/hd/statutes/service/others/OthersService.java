@@ -3,6 +3,7 @@ package com.hd.statutes.service.others;
 import com.hd.statutes.model.entity.Companyemail;
 import com.hd.statutes.model.entity.Opinions;
 import com.hd.statutes.model.entity.Shortmessage;
+import com.hd.statutes.model.entity.Sites;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface OthersService {
     Companyemail getCompanyemail();
     Shortmessage getShormessage();
     int updateShortmessage(Shortmessage shortmessage);
+    Sites getSites();
+    int updateSites(Sites sites);
 }

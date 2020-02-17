@@ -99,7 +99,7 @@
 			<dt><i class="Hui-iconfont">&#xe61a;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a data-href="systemBase" data-title="系统设置" href="javascript:void(0)">网站设置</a></li>
+					<li><a data-href="getSites" data-title="系统设置" href="javascript:void(0)">网站设置</a></li>
 					<li><a data-href="showcompany" data-title="公司介绍" href="javascript:void(0)">公司介绍</a></li>
 					<li><a data-href="serverAgreements" data-title="服务协议" href="javascript:void(0)">服务协议</a></li>
 					<li><a data-href="emailSmtp" data-title="邮件SMTP设置" href="javascript:void(0)">邮件SMTP设置</a></li>
