@@ -22,4 +22,6 @@ public interface UsersService {
     List<Admins> getAllAdmin();
     //删除管理员
     int delAdminById(int adminId);
+    //修改管理员
+    int updateAdmins(Admins admins);
 }

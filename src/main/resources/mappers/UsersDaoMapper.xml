@@ -30,6 +30,9 @@
     <delete id="delAdminById">
         delete from admins where admin_id=#{adminId}
     </delete>
+    <update id="updateAdmins" parameterType="com.hd.statutes.model.entity.Admins">
+        update admins set admin_name=#{adminName},password=#{password} where admin_phone=#{adminPhone}
+    </update>
 
     <resultMap id="admins" type="com.hd.statutes.model.entity.Admins">
         <id property="adminId" column="admin_id"></id>

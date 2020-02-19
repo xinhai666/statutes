@@ -68,4 +68,15 @@ public class UsersController {
     public String delAdminById(@RequestParam("adminId") int adminId){
         return usersService.delAdminById(adminId)+"";
     }
+    //修改管理员
+    @PostMapping("updateAdmins")
+    @ResponseBody
+    public String updateAdmins(Admins admins){
+        int num=usersService.updateAdmins(admins);
+        if(num>0){
+            return "true";
+        }else {
+            return "false";
+        }
+    }
 }

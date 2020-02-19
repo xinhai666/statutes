@@ -24,4 +24,6 @@ public interface UsersDao {
     List<Admins> getAllAdmin();
     //删除管理员
     int delAdminById(@Param("adminId") int adminId);
+    //修改管理员
+    int updateAdmins(Admins admins);
 }

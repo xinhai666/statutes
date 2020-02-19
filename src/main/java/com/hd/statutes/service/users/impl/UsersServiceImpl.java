@@ -52,4 +52,9 @@ public class UsersServiceImpl implements UsersService {
         return usersDao.delAdminById(adminId);
     }
 
+    @Override
+    public int updateAdmins(Admins admins) {
+        return usersDao.updateAdmins(admins);
+    }
+
 }

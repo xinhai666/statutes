@@ -24,6 +24,42 @@
 <title>管理员列表</title>
 </head>
 <body>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top: 20vh;">
+	<div class="modal-dialog">
+		<form action="" method="post" id="adminup">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">管理员修改</h4>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<tr>
+							<td>手机号：</td>
+							<td><input type="hidden" id="adpinput" name="adminPhone" value=""><span id="adptd"></span></td>
+						</tr>
+						<tr>
+							<td>姓名：</td>
+							<td><input id="adName" name="adminName" value=""></td>
+						</tr>
+						<tr>
+							<td>密码：</td>
+							<td><input type="password" id="adPassword" name="password" value="111111"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<p align="center"><button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-primary" id="submit">保存</button>
+					</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 	<div class="text-c"> 
@@ -115,8 +151,8 @@
 								"<tr class='text-c'><td >"+data[i].adminPhone+"</td>"
 								+"<td>"+data[i].adminName+"</td>"
 								+"<td >"+data[i].adminCreatetime+"</td>"
-								+"<td><a title='编辑' href='javascript:;' onclick='admin_up(this," + data[i].adminId + ")'>编辑</a>"
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='admin_del(this," + data[i].adminId + ")'>删除</a>"
+								+"<td><a data-target='#myModal' data-toggle='modal' href='javascript:;' onclick='admin_up(this," + data[i].adminId + ")'>编辑</a>"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='admin_del(this," + data[i].adminId + ")'>删除</a>"
 								+ "</td></tr>"
 						)
 					}
@@ -126,6 +162,40 @@
 				}
 			})
 	}
+
+
+	/*模态框填值*/
+	function admin_up(obj,adminId) {
+		var adminPhone=$(obj).parents("tr").children("td").get(0).innerText;
+		var adminName=$(obj).parents("tr").children("td").get(1).innerText;
+		$("#adptd").text(adminPhone);
+		$("#adpinput").val(adminPhone);
+		$("#adName").val(adminName);
+	}
+	/*保存修改*/
+	$("#submit").click(function () {
+		if($("#adName").val().trim()==''){
+			layer.msg('请输入姓名!',{icon:2,time:1500});
+			return;
+		}
+		if($("#adPassword").val().trim()==''){
+			layer.msg('密码不能为空!',{icon:2,time:1500});
+			return;
+		}
+		$("#adminup").ajaxSubmit({
+			type: 'post',
+			url: "updateAdmins",
+			success: function(data){
+				$("#admtb").empty();
+				getAdmins();
+				layer.msg('保存成功!',{icon:1,time:1000});
+			},
+			error: function(XmlHttpRequest, textStatus, errorThrown){
+				layer.msg('保存出错了!',{icon:2,time:1000});
+			}
+		});
+	})
+
 
 /*管理员-删除*/
 function admin_del(obj,id){
