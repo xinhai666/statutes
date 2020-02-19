@@ -57,4 +57,9 @@ public class UsersServiceImpl implements UsersService {
         return usersDao.updateAdmins(admins);
     }
 
+    @Override
+    public Admins adminLogin(Admins admins) {
+        return usersDao.adminLogin(admins);
+    }
+
 }

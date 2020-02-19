@@ -24,4 +24,6 @@ public interface UsersService {
     int delAdminById(int adminId);
     //修改管理员
     int updateAdmins(Admins admins);
+    //管理员登录
+    Admins adminLogin(Admins admins);
 }

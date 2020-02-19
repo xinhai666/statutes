@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -77,6 +78,19 @@ public class UsersController {
             return "true";
         }else {
             return "false";
+        }
+    }
+    //管理员登录
+    @PostMapping("adminLogin")
+    public String adminLogin(Admins admins,HttpServletRequest request){
+        HttpSession session=request.getSession();
+        Admins a=usersService.adminLogin(admins);
+        if(a!=null){
+            session.setAttribute("admins",a);
+            return "index";
+        }else {
+            request.setAttribute("fail","账号或密码错误，请重试");
+            return "login";
         }
     }
 }

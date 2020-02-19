@@ -21,37 +21,59 @@
 <title>航多后台登录</title>
 </head>
 <body>
-<input type="hidden" id="TenantId" name="TenantId" value="" />
 <div class="loginWraper">
   <div id="loginform" class="loginBox">
-    <form class="form form-horizontal" action="goindex" method="post">
+    <form class="form form-horizontal" action="adminLogin" method="post" id="adminlogin">
       <br>
       <div class="row cl">
+       <br>
         <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
         <div class="formControls col-xs-8">
-          <input id="" name="" type="text" placeholder="账户" class="input-text size-L">
+          <input id="adminPhone" name="adminPhone" type="text" placeholder="手机号" value="" class="input-text size-L">
         </div>
       </div>
       <div class="row cl">
         <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
         <div class="formControls col-xs-8">
-          <input id="" name="" type="password" placeholder="密码" class="input-text size-L">
+          <input id="password" name="password" type="password" placeholder="密码" value="" class="input-text size-L">
         </div>
       </div>
       <div class="row cl">
         <div class="formControls col-xs-8 col-xs-offset-3">
-          <p></p>
-          <input name="" type="submit" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+          <input type="button" id="subt" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
         </div>
       </div>
+      <br>
+      <p align="center" ><span style="color: red" id="fail">${fail!}</span></p>
     </form>
   </div>
 </div>
 <div class="footer">Copyright 航多知识管理</div>
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
 <script type="text/javascript" src="h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+    $("#subt").click(function () {
+      if($("#adminPhone").val().trim()==''){
+        alert("请输入登录手机号")
+        return;
+      }
+      if($("#password").val().trim()==''){
+        alert("请输入密码")
+        return;
+      }
+      $("#adminlogin").ajaxSubmit({
+        type: 'post',
+        url: "adminLogin",
+        success: function(data){
+          $("#adminlogin").submit();
+        }
+      });
+    })
+  })
+</script>
 
 </body>
 </html>
