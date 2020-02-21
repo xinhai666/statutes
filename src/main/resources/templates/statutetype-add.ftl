@@ -77,7 +77,7 @@ $(function(){
 					layer.msg('添加完成!',{icon:1,time:1000});
 				},
                 error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('error!',{icon:1,time:1000});
+					layer.msg('error!',{icon:2,time:1000});
 				}
 			});
 			var index = parent.layer.getFrameIndex(window.name);

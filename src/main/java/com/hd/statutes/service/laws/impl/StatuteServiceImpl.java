@@ -2,6 +2,8 @@ package com.hd.statutes.service.laws.impl;
 
 import com.hd.statutes.dao.lawsDao.StatuteDao;
 import com.hd.statutes.model.entity.*;
+import com.hd.statutes.model.vo.ClauseVO;
+import com.hd.statutes.model.vo.StatuteVO;
 import com.hd.statutes.service.laws.StatuteService;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class StatuteServiceImpl implements StatuteService {
     private StatuteDao statuteDao;
 
     @Override
-    public List<Statute> getAllStatutes(int statutestypeId, int statutesplitId) {
+    public List<StatuteVO> getAllStatutes(int statutestypeId, int statutesplitId) {
         return statuteDao.getAllStatutes(statutestypeId,statutesplitId);
     }
 
@@ -60,6 +62,31 @@ public class StatuteServiceImpl implements StatuteService {
     @Override
     public Contents getContentsById(int contentsId) {
         return statuteDao.getContentsById(contentsId);
+    }
+
+    @Override
+    public List<Statute> checkStatuteByName(String statuteName) {
+        return statuteDao.checkStatuteByName(statuteName);
+    }
+
+    @Override
+    public int addClause(Clause clause) {
+        return statuteDao.addClause(clause);
+    }
+
+    @Override
+    public List<ClauseVO> getClauseVoBystaId(int staId) {
+        return statuteDao.getClauseVoBystaId(staId);
+    }
+
+    @Override
+    public int delClauseById(int clauseId) {
+        return statuteDao.delClauseById(clauseId);
+    }
+
+    @Override
+    public ClauseVO checkClauseById(int clauseId) {
+        return statuteDao.checkClauseById(clauseId);
     }
 
     @Override

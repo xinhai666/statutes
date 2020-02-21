@@ -26,8 +26,8 @@
         delete from statutesplit where statutesplit_id=#{statutesplitId}
     </delete>
     <insert id="addStatute" parameterType="com.hd.statutes.model.entity.Statute">
-        insert into statute(statp_id,stasp_id,statute_partno, statute_alias, statute_version, statute_name, statute_reveal, statute_iconpath, statute_pdf_name, statute_explain)
-        values (#{statpId},#{staspId},#{statutePartno},#{statuteAlias},#{statuteVersion},#{statuteName},#{statuteReveal},#{statuteIconpath},#{statutePdfName},#{statuteExplain})
+        insert into statute(statp_id,stasp_id,statute_partno, statute_alias, statute_version, statute_name, statute_reveal, statute_iconpath, statute_pdf_name,statute_pdf_link,statute_explain)
+        values (#{statpId},#{staspId},#{statutePartno},#{statuteAlias},#{statuteVersion},#{statuteName},#{statuteReveal},#{statuteIconpath},#{statutePdfName},#{statutePdfLink},#{statuteExplain})
     </insert>
     <select id="getAllStatutes" resultMap="statuteVO">
         select stt.statutestype_name,sts.statutesplit_name,sta.* from statute sta left join statutesplit sts on sta.stasp_id=sts.statutesplit_id
@@ -54,7 +54,7 @@
             <if test="staId!=null and staId!=0">
                 and sta_id=#{staId}
             </if>
-            group by contents_serial
+            order by contents_serial
         </where>
     </select>
     <insert id="addContents" parameterType="com.hd.statutes.model.entity.Contents">
@@ -64,6 +64,50 @@
     <select id="getContentsById" resultMap="Contents">
         select * from contents where contents_id=#{contentsId}
     </select>
+    <select id="checkStatuteByName" resultMap="statute">
+        select * from statute where statute_name like concat('%',#{statuteName},'%')
+    </select>
+
+    <insert id="addClause" parameterType="com.hd.statutes.model.entity.Clause">
+        insert into clause(sta_id, con_id, clause_number, clause_anothername, clause_version, clause_title, clause_content, clause_antistop)
+        VALUES(#{staId},#{conId},#{clauseNumber},#{clauseAnothername},#{clauseVersion},#{clauseTitle},#{clauseContent},#{clauseAntistop})
+    </insert>
+
+    <select id="getClauseVoBystaId" resultMap="ClauseVO">
+        select sta.statute_name,cla.* from clause cla join statute sta on cla.sta_id=sta.statute_id
+        where sta.statute_id=#{staId}
+    </select>
+    <delete id="delClauseById">
+        delete from clause where clause_id=#{clauseId}
+    </delete>
+    <select id="checkClauseById" resultMap="ClauseVO">
+        select sta.statute_name,cla.* from clause cla join statute sta on cla.sta_id=sta.statute_id
+        where cla.clause_id=#{clauseId}
+    </select>
+    <resultMap id="ClauseVO" type="com.hd.statutes.model.vo.ClauseVO">
+        <id property="clauseId" column="clause_id"></id>
+        <result property="staId" column="sta_id"></result>
+        <result property="conId" column="con_id"></result>
+        <result property="clauseNumber" column="clause_number"></result>
+        <result property="clauseAnothername" column="clause_anothername"></result>
+        <result property="clauseVersion" column="clause_version"></result>
+        <result property="clauseTitle" column="clause_title"></result>
+        <result property="clauseContent" column="clause_content"></result>
+        <result property="clauseAntistop" column="clause_antistop"></result>
+        <result property="statuteName" column="statute_name"></result>
+    </resultMap>
+
+    <resultMap id="Clause" type="com.hd.statutes.model.entity.Clause">
+        <id property="clauseId" column="clause_id"></id>
+        <result property="staId" column="sta_id"></result>
+        <result property="conId" column="con_id"></result>
+        <result property="clauseNumber" column="clause_number"></result>
+        <result property="clauseAnothername" column="clause_anothername"></result>
+        <result property="clauseVersion" column="clause_version"></result>
+        <result property="clauseTitle" column="clause_title"></result>
+        <result property="clauseContent" column="clause_content"></result>
+        <result property="clauseAntistop" column="clause_antistop"></result>
+    </resultMap>
 
     <resultMap id="Contents" type="com.hd.statutes.model.entity.Contents">
         <id property="contentsId" column="contents_id"></id>

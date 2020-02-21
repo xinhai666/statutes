@@ -1,11 +1,11 @@
 package com.hd.statutes.controller.management;
 
 import com.alibaba.fastjson.JSON;
-import com.hd.statutes.model.entity.Contents;
-import com.hd.statutes.model.entity.Statute;
-import com.hd.statutes.model.entity.Statutesplit;
-import com.hd.statutes.model.entity.Statutestype;
+import com.hd.statutes.model.entity.*;
+import com.hd.statutes.model.vo.ClauseVO;
+import com.hd.statutes.model.vo.StatuteVO;
 import com.hd.statutes.service.laws.StatuteService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -66,10 +66,9 @@ public class StatuteController {
     @ResponseBody
     public String getAllStatutes(@RequestParam(value = "statutestypeId",defaultValue = "0") int statutestypeId,
                                  @RequestParam(value = "statutesplitId",defaultValue = "0") int statutesplitId){
-        List<Statute> list=statuteService.getAllStatutes(statutestypeId,statutesplitId);
-        String listStr= JSON.toJSONString(list);
-        //System.out.println(listStr);
-        return listStr;
+        List<StatuteVO> list=statuteService.getAllStatutes(statutestypeId,statutesplitId);
+        return JSON.toJSONString(list);
+
     }
     @GetMapping("stasplitlist")
     public String stasplitlist(@RequestParam("statutestypeId")int statutestypeId, Model model){
@@ -103,25 +102,7 @@ public class StatuteController {
     //添加法规
     @PostMapping(value = "addStatute",produces = "text/html;charset=utf-8")
     @ResponseBody
-    public String addStatute(Statute sta, MultipartFile icofile) {
-        StringBuffer txpath=new StringBuffer();
-        if(!icofile.isEmpty()) {
-            //原文件名
-            String oldFileName=icofile.getOriginalFilename();
-            String fileName= sta.getStatuteId()+"--"+UUID.randomUUID().toString().substring(2,7);
-            fileName+=System.currentTimeMillis()+oldFileName;
-            File file=new File("D:/File",fileName);
-                if(!file.exists()) {
-                    file.mkdir();
-                }
-                try {
-                    icofile.transferTo(file);
-                    txpath.append("/File/"+file.getName());
-                    sta.setStatuteIconpath(txpath.toString());
-                } catch (IllegalStateException | IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    public String addStatute(Statute sta) {
         int num=statuteService.addStatute(sta);
         if(num>0) {
             return "true";
@@ -166,4 +147,47 @@ public class StatuteController {
        }
     }
 
+    /**
+     * 新增条款
+     * @param clause
+     * @return
+     */
+    @PostMapping("addClause")
+    @ResponseBody
+    public String addClause(Clause clause){
+       int num=statuteService.addClause(clause);
+       if(num>0){
+           return "true";
+       }else {
+           return "false";
+       }
+    }
+
+    /**
+     * 根据法规查询条款
+     * @param staId
+     * @return
+     */
+    @PostMapping("getClauseVoBystaId")
+    @ResponseBody
+    public String getClauseVoBystaId(@RequestParam("staId") int staId){
+        List<ClauseVO> list=statuteService.getClauseVoBystaId(staId);
+        return JSON.toJSONString(list);
+    }
+
+    /**
+     * 删除条款
+     * @param clauseId
+     * @return
+     */
+    @PostMapping("delClauseById")
+    @ResponseBody
+    public String delClauseById(@RequestParam("clauseId")int clauseId){
+        int num=statuteService.delClauseById(clauseId);
+        if(num>0){
+            return "true";
+        }else {
+            return "false";
+        }
+    }
 }

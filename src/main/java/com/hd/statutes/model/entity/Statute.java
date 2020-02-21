@@ -7,7 +7,7 @@ public class Statute {
   private Integer staspId;
   private Integer statpId;
   private Integer statutePartno;
-  private String statuteAlias;
+  private String statuteAlias;//别名
   private String statuteVersion;
   private String statuteName;
   private Integer statuteReveal;

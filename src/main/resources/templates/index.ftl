@@ -71,8 +71,8 @@
 					<li><a data-href="articleadd" data-title="新增法规" href="javascript:;">新增法规</a></li>
 					<li><a data-href="contentsPage" data-title="法规目录管理" href="javascript:;">法规目录管理</a></li>
 					<li><a data-href="addContentsPage" data-title="新增目录" href="javascript:;">新增目录</a></li>
-					<li><a data-href="member-record-browse.html" data-title="条款列表" href="javascript:void(0)">条款列表</a></li>
-					<li><a data-href="member-record-download.html" data-title="新增条款" href="javascript:void(0)">新增条款</a></li>
+					<li><a data-href="clauseList" data-title="条款列表" href="javascript:void(0)">条款列表</a></li>
+					<li><a data-href="clauseAdd" data-title="新增条款" href="javascript:void(0)">新增条款</a></li>
 			</ul>
 		</dd>
 	</dl>

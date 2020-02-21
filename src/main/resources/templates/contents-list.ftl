@@ -78,7 +78,14 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
-
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": false,//状态保存
+		"aoColumnDefs": [
+			//{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
+			{"orderable":false,"aTargets":[2]}// 制定列不参与排序
+		]
+	});
 	function getAll(){
 		$(".table-sort").dataTable().fnDestroy();//还原初始化了datatable
 		var staId=$("#statuteId").val();

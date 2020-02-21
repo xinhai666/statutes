@@ -1,6 +1,8 @@
 package com.hd.statutes.service.laws;
 
 import com.hd.statutes.model.entity.*;
+import com.hd.statutes.model.vo.ClauseVO;
+import com.hd.statutes.model.vo.StatuteVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public interface StatuteService {
      * @param statutesplitId
      * @return
      */
-    List<Statute> getAllStatutes(int statutestypeId,int statutesplitId);
+    List<StatuteVO> getAllStatutes(int statutestypeId, int statutesplitId);
 
     /**
      * 添加法规类型
@@ -90,5 +92,38 @@ public interface StatuteService {
      */
     Contents getContentsById(int contentsId);
 
+    /**
+     * 模糊查找法规
+     * @param statuteName
+     * @return
+     */
+    List<Statute> checkStatuteByName(String statuteName);
 
+    /**
+     * 新增条款
+     * @param clause
+     * @return
+     */
+    int addClause(Clause clause);
+
+    /**
+     * 根据法规查条款
+     * @param staId
+     * @return
+     */
+    List<ClauseVO> getClauseVoBystaId(int staId);
+
+    /**
+     * 删除条款
+     * @param clauseId
+     * @return
+     */
+    int delClauseById(int clauseId);
+
+    /**
+     * 查询一条法规
+     * @param clauseId
+     * @return
+     */
+    ClauseVO checkClauseById(int clauseId);
 }

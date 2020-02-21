@@ -38,6 +38,16 @@ public class QNController {
         System.out.println(url);
         return url;
     }
+    @PostMapping("/pdfUpload")
+    @ResponseBody
+    public String pdfUpload(@RequestParam("pdffile") MultipartFile pdffile, Model model)throws Exception{
+        Response response=qnService.uploadFile(pdffile.getInputStream());
+        DefaultPutRet putRet=new Gson().fromJson(response.bodyString(),DefaultPutRet.class);
+        String url =path+"/"+putRet.key;
+        model.addAttribute("url",url);
+        System.out.println(url);
+        return url;
+    }
 
 
 }

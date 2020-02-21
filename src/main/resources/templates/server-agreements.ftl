@@ -75,8 +75,8 @@
 		var E = window.wangEditor;
 		/*var editor = new E('#editor')**/
 		var editor = new E( document.getElementById('editor'));
+		editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
 		editor.create();
-
 		/*获取数据库内容*/
 		$.get('getCompanyContent?companyType=2',function (data) {
 			editor.txt.html(data);

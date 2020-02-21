@@ -31,9 +31,7 @@ public class LinkController {
         return "statutetype-add";
     }
     @RequestMapping("contentsPage") //法规目录管理页
-    public String contentsPage(){
-        return "contents-list";
-    }
+    public String contentsPage(){ return "contents-list";}
     @RequestMapping("addContentsPage")//添加目录页
     public String addContentsPage(){
         return "addmulu";
@@ -74,5 +72,9 @@ public class LinkController {
     public String opinionInfo(){
         return "opinion_list";
     }
+    @RequestMapping("clauseList")//条款管理页
+    public String clauseList(){return "clause-list";}
+    @RequestMapping("clauseAdd")//新增条款页
+    public String clauseAdd(){return "clause-add";}
 
 }

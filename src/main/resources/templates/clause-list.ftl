@@ -34,37 +34,20 @@
 
 <div class="page-container">
     <div class="text-a">
-        法规： <select  class="input-text" style="width:250px" placeholder="" id="" name="" >
-                    <option class="" value="请选择">请选择</option>
-                    <option class="" value="CCAR-21-R4 民用航空产品和零部件合格审定规定">CCAR-21-R4 民用航空产品和零部件合格审定规定</option>
-                    <option class="" value="CCAR-23-R3正常类、实用类、特技类和通勤类飞机适航标准">CCAR-23-R3正常类、实用类、特技类和通勤类飞机适航标准</option>
-                    <option class="" selected value="CCAR-25-R4运输类飞机适航标准">CCAR-25-R4运输类飞机适航标准</option>
-                    <option class="" value="CCAR-26运输类飞机的持续适航和安全改进规定">CCAR-26运输类飞机的持续适航和安全改进规定</option>
-                    <option class="" value="CCAR-27-R1正常类旋翼航空器适航规定">CCAR-27-R1正常类旋翼航空器适航规定</option>
-                    <option class="" value="CCAR-29-R1运输类旋翼航空器适航规定">CCAR-29-R1运输类旋翼航空器适航规定</option>
+        法规： <select  class="input-text" style="width:300px" id="statuteId" name="statuteId" >
+                    <option value="0">请选择</option>
             </select>
     </div>
-        <br/>
-
-    条款号：	<input type="text" class="input-text" style="width:250px" placeholder="" id="" name=""/>
-    关键词：	<input type="text" class="input-text" style="width:250px" placeholder="" id="" name=""/>
-    <button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
-
-
-
     <div class="row">
         <div class="col-md-6 col-md-offset-10">
-        <button type="button" class="btn btn-primary"><i class="Hui-iconfont">&#xe600;</i> 新增条款</button>
+            <a href="clauseAdd"><button type="button" class="btn btn-primary"><i class="Hui-iconfont">&#xe600;</i> 新增条款</button></a>
         </div>
     </div>
-
-
     <br/>
     <div class="mt-20">
             <table class="table table-border table-bordered table-hover table-bg table-sort">
             <thead>
             <tr class="text-c">
-                <th width="25"><input type="checkbox" name="" value=""></th>
                 <th width="80">条款号</th>
                 <th width="100">条款号别名</th>
                 <th width="90">条款标题</th>
@@ -73,19 +56,7 @@
                 <th width="60">操作</th>
             </tr>
             </thead>
-            <tbody>
-            <tr class="text-c">
-                <td><input type="checkbox" value="1" name=""></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-l"></td>
-                <td class="f-14"><a title="编辑" href="javascript:;" onclick="user_del(this,'1')" class="ml-5" style="text-decoration:none">编辑</a>
-                    <a title="删除" href="javascript:;" onclick="user_del(this,'1')" class="ml-5" style="text-decoration:none">删除</a>
-                </td>
-            </tr>
-
+            <tbody id="clausetb">
             </tbody>
         </table>
     </div>
@@ -102,27 +73,68 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script> 
 <script type="text/javascript">
-$('.table-sort').dataTable({
-	"aaSorting": [[ 1, "desc" ]],//默认第几个排序
-	"bStateSave": true,//状态保存
-	"aoColumnDefs": [
-	//{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
-	  {"orderable":false,"aTargets":[0,6]}// 制定列不参与排序
-	]
-});
+    $('.table-sort').dataTable({
+        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+        "bStateSave": true,//状态保存
+        "aoColumnDefs": [
+            //{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
+            {"orderable":false,"aTargets":[5]}// 制定列不参与排序
+        ]
+    });
+    /*获得所有法规*/
+    $.post('checkStatuteByName',function (data) {
+        if(data!=null){
+            for(var i=0;i<data.length;i++){
+                $("#statuteId").append(
+                    "<option value='"+data[i].statuteId+"'>"+data[i].statuteAlias+" "+data[i].statuteName+"</option>"
+                )
+            }
+        }
+    },'json');
+    //根据法规查条款
+    $("#statuteId").change(function () {
+        $(".table-sort").dataTable().fnDestroy();//还原初始化了datatable
+        $("#clausetb tr").slice(0).remove();
+        $.post('getClauseVoBystaId',{'staId':$("#statuteId").val()},function (data) {
+            if(data==null||data==''){layer.msg('没有数据可用!',{icon:5,time:1600});}
+            for(var i=0;i<data.length;i++) {
+                $("#clausetb").append(
+                    "<tr class=\"text-c\">"
+                    + "<td>" + data[i].clauseNumber + "</td>"
+                    + "<td>" + data[i].clauseAnothername + "</td>"
+                    + "<td>" + data[i].clauseTitle + "</td>"
+                    + "<td>" + data[i].statuteName + "</td>"
+                    + "<td>" + data[i].clauseVersion + "</td>"
+                    + "<td class=\"f-14\"><a title=\"编辑\" href=\"javascript:;\" onclick=\"clause_up(this,'"+data[i].clauseId+"')\" class=\"ml-5\" style=\"text-decoration:none\">编辑</a>" +
+                    "<a title=\"删除\" href=\"javascript:;\" onclick=\"clause_del(this,'"+data[i].clauseId+"')\" class=\"ml-5\" style=\"text-decoration:none\">删除</a>" +
+                    " </td></tr>"
+                )
+            }
+            $('.table-sort').dataTable({
+                "aaSorting": [[ 1, "desc" ]],//默认第几个排序
+                "bStateSave": true,//状态保存
+                "aoColumnDefs": [
+                    //{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
+                    {"orderable":false,"aTargets":[5]}// 制定列不参与排序
+                ]
+            });
+        },'json');
+    });
 
-/*用户-删除*/
-function user_del(obj,id){
+/*删除*/
+function clause_del(obj,id){
 	layer.confirm('确认要删除吗？',function(index){
 		$.ajax({
 			type: 'POST',
-			url: '',
+			url: 'delClauseById',
+            data:{'clauseId':id},
 			dataType: 'json',
 			success: function(data){
 				$(obj).parents("tr").remove();
 				layer.msg('已删除!',{icon:1,time:1000});
 			},
 			error:function(data) {
+                layer.msg('删除失败!',{icon:2,time:1000});
 				console.log(data.msg);
 			},
 		});		

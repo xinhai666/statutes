@@ -25,6 +25,11 @@
 <!--/meta 作为公共模版分离出去-->
 
 <title>新增法规</title>
+<style type="text/css">
+	.w-e-text-container{
+		height: 600px !important;/*!important是重点，因为原div是行内样式设置的高度300px*/
+	}
+</style>
 <!-- <meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载"> -->
 <!-- <meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。"> -->
 </head>
@@ -36,7 +41,7 @@
 <article class="page-container">
 	<form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data">
 		<div class="row c1">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>*法规类型:</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>*法规类型:</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<span class="select-box" style="width: 30%">
 			<select  class="select" id="statutestypeId" name="statpId" >
@@ -94,50 +99,37 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">*首页法规图标：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="file" value="选择图片" id="icofile" name="icofile">
+				<img id="logoImg" src="image/file.png"; alt="暂无图片" style="height:100px;width:120px;" />
+				<input type="file" name="logofile" id="logofile" style="position:absolute;top:0;left:0px; height:100px;width:120px;filter:alpha(opacity:0);opacity: 0" />
+				<input type="hidden" value="" id="statuteIconpath" name="statuteIconpath">
 			</div>
 		</div>
-		<#--<div class="row cl">
-				<label class="form-label col-xs-4 col-sm-2">*首页法规图标：</label>
-				<div class="formControls col-xs-8 col-sm-9">
-					<div class="uploader-thum-container">
-						<div id="fileList" class="uploader-list"></div>
-						<div id="filePicker">选择图片</div>
-					</div>
-				</div>
-			</div>-->
+
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">法规PDF文件名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text"  style="width: 30%"  placeholder="不超过100个字" id="statutePdfName" name="statutePdfName">
 			</div>
 		</div>
-		<#--<div class="row cl">
+		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">法规PDF文件下载链接：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-					<input type="text" class="input-text" style="width: 30%" placeholder="不超过100个字" id="sources" name="sources">
-					<button  class="btn btn-default btn-uploadstar radius ml-10">上传本地法规</button>
-				</div>
-		</div>-->
+			<div class="col-xs-8 col-sm-9">
+				<input id="statutePdfLink" name="statutePdfLink"class="input-text" style="width: 30%" placeholder="不超过100个字">
+				<input type="file" name="pdffile" id="btn_file" style="display:none">
+				<button type="button" class="btn btn-default ml-10" onclick="F_Open_dialog()">上传本地法规</button>
+			</div>
+		</div>
 
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">*法规版本说明：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<textarea style="width:80%;height:400px;" id="statuteExplain" name="statuteExplain"></textarea>
+			<div class="col-xs-8 col-sm-9" style="width:800px">
+				<!--用当前元素来控制高度-->
+				<div id="editor">
+
+				</div>
 			</div>
+			<textarea style="display:none" id="statuteExplain" name="statuteExplain"></textarea>
 		</div>
-		
-		<#--<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">*法规版本说明：</label>
-			<div class="formControls col-xs-8 col-sm-9"> 
-				<script id="editor" type="text/plain" style="width:80%;height:400px;"></script> 
-			</div>
-		</div>-->
-		<#--<div class="row cl">
-			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
-			</div>
-		</div>-->
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
 				<button class="btn btn-primary radius" type="button" id="subt"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
@@ -162,8 +154,54 @@
 <script type="text/javascript" src="lib/ueditor/1.4.3/ueditor.config.js"></script> 
 <script type="text/javascript" src="lib/ueditor/1.4.3/ueditor.all.min.js"> </script> 
 <script type="text/javascript" src="lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
 <script type="text/javascript">
+	function F_Open_dialog() {
+		document.getElementById("btn_file").click();
+	}
 $(function(){
+	var E = window.wangEditor;
+	/*var editor = new E('#editor')**/
+	var editor = new E( document.getElementById('editor'));
+	editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+	editor.create();
+
+	//上传预览图片
+	$("#logofile").change(function () {
+		var fd=new FormData($("#form-article-add")[0]);
+		$.ajax({
+			type : "post",
+			url : "shangchuan",
+			data : fd,
+			contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+			processData: false,// 告诉jQuery不要去处理发送的数据
+			success : function(data) {
+				$("#logoImg").attr('src',data);
+				$("#statuteIconpath").val(data);
+			},
+			error : function() {
+				layer.msg('操作失败!',{icon:1,time:1000});
+			}
+		});
+	});
+	//上传PDF
+	$("#btn_file").change(function () {
+		var fd=new FormData($("#form-article-add")[0]);
+		$.ajax({
+			type :"post",
+			url : "pdfUpload",
+			data : fd,
+			contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+			processData: false,// 告诉jQuery不要去处理发送的数据
+			success : function(data) {
+				$("#statutePdfLink").val(data);
+			},
+			error : function() {
+				layer.msg('操作失败!',{icon:1,time:1000});
+			}
+		});
+	})
+
 	/*获得所有法规类型*/
 	$.getJSON('getAllStatype',function (data) {
 		if(data!=null){
@@ -220,21 +258,23 @@ $(function(){
 			statuteReveal:{
 				required:true,
 			},
-			/*statuteIconpath:{
+			statuteIconpath:{
 				required:true,
-			},*/
+			},
 			statutePdfName:{
 				required:true,
 			},
-			/*statutePdfLink:{
+			statutePdfLink:{
 				required:true,
-			},*/
+			},
 			statuteExplain:{
 				required:true,
 			},
 		},
 	});
+	//提交表单数据
 	$("#subt").click(function () {
+		$("#statuteExplain").html(editor.txt.html());//获取富文本框内容，填入标签
 		var fd=new FormData($("#form-article-add")[0]);
 		$.ajax({
 			type : "post",
@@ -250,116 +290,6 @@ $(function(){
 			}
 		});
 	})
-		/*onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			//$(form).ajaxSubmit();
-			var index = parent.layer.getFrameIndex(window.name);
-			//parent.$('.btn-refresh').click();
-			parent.layer.close(index);
-		}*/
-	/*$list = $("#fileList"),
-	$btn = $("#btn-star"),
-	state = "pending",
-	uploader;
-
-	var uploader = WebUploader.create({
-		auto: true,
-		swf: 'lib/webuploader/0.1.5/Uploader.swf',
-
-		// 文件接收服务端。
-		server: 'fileupload.php',
-
-		// 选择文件的按钮。可选。
-		// 内部根据当前运行是创建，可能是input元素，也可能是flash.
-		pick: '#filePicker',
-
-		// 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
-		resize: false,
-		// 只允许选择图片文件。
-		accept: {
-			title: 'Images',
-			extensions: 'gif,jpg,jpeg,bmp,png',
-			mimeTypes: 'image/!*'
-		}
-	});
-	uploader.on( 'fileQueued', function( file ) {
-		var $li = $(
-			'<div id="' + file.id + '" class="item">' +
-				'<div class="pic-box"><img></div>'+
-				'<div class="info">' + file.name + '</div>' +
-				'<p class="state">等待上传...</p>'+
-			'</div>'
-		),
-		$img = $li.find('img');
-		$list.append( $li );
-
-		// 创建缩略图
-		// 如果为非图片文件，可以不用调用此方法。
-		// thumbnailWidth x thumbnailHeight 为 100 x 100
-		uploader.makeThumb( file, function( error, src ) {
-			if ( error ) {
-				$img.replaceWith('<span>不能预览</span>');
-				return;
-			}
-
-			$img.attr( 'src', src );
-		}, thumbnailWidth, thumbnailHeight );
-	});
-	// 文件上传过程中创建进度条实时显示。
-	uploader.on( 'uploadProgress', function( file, percentage ) {
-		var $li = $( '#'+file.id ),
-			$percent = $li.find('.progress-box .sr-only');
-
-		// 避免重复创建
-		if ( !$percent.length ) {
-			$percent = $('<div class="progress-box"><span class="progress-bar radius"><span class="sr-only" style="width:0%"></span></span></div>').appendTo( $li ).find('.sr-only');
-		}
-		$li.find(".state").text("上传中");
-		$percent.css( 'width', percentage * 100 + '%' );
-	});
-
-	// 文件上传成功，给item添加成功class, 用样式标记上传成功。
-	uploader.on( 'uploadSuccess', function( file ) {
-		$( '#'+file.id ).addClass('upload-state-success').find(".state").text("已上传");
-	});
-
-	// 文件上传失败，显示上传出错。
-	uploader.on( 'uploadError', function( file ) {
-		$( '#'+file.id ).addClass('upload-state-error').find(".state").text("上传出错");
-	});
-
-	// 完成上传完了，成功或者失败，先删除进度条。
-	uploader.on( 'uploadComplete', function( file ) {
-		$( '#'+file.id ).find('.progress-box').fadeOut();
-	});
-	uploader.on('all', function (type) {
-        if (type === 'startUpload') {
-            state = 'uploading';
-        } else if (type === 'stopUpload') {
-            state = 'paused';
-        } else if (type === 'uploadFinished') {
-            state = 'done';
-        }
-
-        if (state === 'uploading') {
-            $btn.text('暂停上传');
-        } else {
-            $btn.text('开始上传');
-        }
-    });
-
-    $btn.on('click', function () {
-        if (state === 'uploading') {
-            uploader.stop();
-        } else {
-            uploader.upload();
-        }
-    });*/
-
-	/*var ue = UE.getEditor('editor');*/
-
 });
 </script>
 <!--/请在上方写此页面业务相关的脚本-->

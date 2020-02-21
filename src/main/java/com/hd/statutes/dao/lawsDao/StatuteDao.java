@@ -1,9 +1,8 @@
 package com.hd.statutes.dao.lawsDao;
 
-import com.hd.statutes.model.entity.Contents;
-import com.hd.statutes.model.entity.Statute;
-import com.hd.statutes.model.entity.Statutesplit;
-import com.hd.statutes.model.entity.Statutestype;
+import com.hd.statutes.model.entity.*;
+import com.hd.statutes.model.vo.ClauseVO;
+import com.hd.statutes.model.vo.StatuteVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface StatuteDao {
     //查询法规
-    List<Statute> getAllStatutes(@Param("statutestypeId") int statutestypeId, @Param("statutesplitId") int statutesplitId);
+    List<StatuteVO> getAllStatutes(@Param("statutestypeId") int statutestypeId, @Param("statutesplitId") int statutesplitId);
     //查询所有规章类型
     List<Statutestype> getAllStatype();
     //根据规章类型 查询所有主分支
@@ -36,4 +35,14 @@ public interface StatuteDao {
     int addContents(Contents contents);
     //查询一个目录
     Contents getContentsById(@Param("contentsId") int contentsId);
+    //模糊查找法规（wx）
+    List<Statute> checkStatuteByName(@Param("statuteName")String statuteName);
+    //新增条款
+    int addClause(Clause clause);
+    //根据法规查询条款
+    List<ClauseVO> getClauseVoBystaId(@Param("staId") int staId);
+    //删除法规
+    int delClauseById(@Param("clauseId")int clauseId);
+    //查询一条法规
+    ClauseVO checkClauseById(@Param("clauseId") int clauseId);
 }
