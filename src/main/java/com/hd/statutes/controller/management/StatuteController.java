@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -125,14 +126,12 @@ public class StatuteController {
                                              @RequestParam(value = "staId",defaultValue = "0") int staId ){
        List<Contents> list=statuteService.getAllContentsByStatuteId(contentsLevel,conId,staId);
        String listStr=JSON.toJSONString(list);
-       System.out.println(listStr);
+       //System.out.println(listStr);
        return listStr;
     }
     @PostMapping("addContents")
     @ResponseBody
     public String addContents(Contents contents){
-        /*System.out.println(contents.getContentsName());
-        System.out.println(contents.getConId());*/
         System.out.println(statuteService.getContentsById(contents.getConId()));
         int contentsLevel=1;
         if(contents.getConId()>0){
@@ -164,7 +163,7 @@ public class StatuteController {
     }
 
     /**
-     * 根据法规查询条款
+     * 根据法规查询所有条款
      * @param staId
      * @return
      */
@@ -190,4 +189,27 @@ public class StatuteController {
             return "false";
         }
     }
+    /**
+     * 查询一个条款
+     * @param clauseId
+     * @return
+     */
+    @GetMapping("checkClauseById")
+    public String checkClauseById(@RequestParam("clauseId") int clauseId, HttpServletRequest request){
+        ClauseVO clauseVO=statuteService.checkClauseById(clauseId);
+        //System.out.println(clauseVO.getClauseAnothername());
+        request.setAttribute("clause",clauseVO);
+        return "clause-update";
+    }
+
+    /**
+     * 修改条款
+     * @param clause
+     * @return
+     */
+    @PostMapping("updateClause")
+    @ResponseBody
+   public void updateClause(Clause clause){
+        statuteService.updateClause(clause);
+   }
 }

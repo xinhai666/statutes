@@ -90,6 +90,11 @@ public class StatuteServiceImpl implements StatuteService {
     }
 
     @Override
+    public int updateClause(Clause clause) {
+        return statuteDao.updateClause(clause);
+    }
+
+    @Override
     public List<Statutestype> getAllStatype() {
         return statuteDao.getAllStatype();
     }

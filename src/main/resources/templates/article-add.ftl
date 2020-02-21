@@ -99,8 +99,8 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">*首页法规图标：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<img id="logoImg" src="image/file.png"; alt="暂无图片" style="height:100px;width:120px;" />
-				<input type="file" name="logofile" id="logofile" style="position:absolute;top:0;left:0px; height:100px;width:120px;filter:alpha(opacity:0);opacity: 0" />
+				<img id="logoImg" src="image/file.png"; alt="暂无图片" style="height:120px;width:150px;" />
+				<input type="file" name="logofile" id="logofile" style="position:absolute;top:0;left:0px; height:120px;width:150px;filter:alpha(opacity:0);opacity: 0" />
 				<input type="hidden" value="" id="statuteIconpath" name="statuteIconpath">
 			</div>
 		</div>
@@ -114,7 +114,7 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">法规PDF文件下载链接：</label>
 			<div class="col-xs-8 col-sm-9">
-				<input id="statutePdfLink" name="statutePdfLink"class="input-text" style="width: 30%" placeholder="不超过100个字">
+				<input id="statutePdfLink" readonly name="statutePdfLink"class="input-text" style="width: 30%" placeholder="不超过100个字">
 				<input type="file" name="pdffile" id="btn_file" style="display:none">
 				<button type="button" class="btn btn-default ml-10" onclick="F_Open_dialog()">上传本地法规</button>
 			</div>

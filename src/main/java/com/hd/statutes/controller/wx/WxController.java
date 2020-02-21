@@ -55,13 +55,13 @@ public class WxController {
     }
 
     /**
-     * 查询一条法规
+     * 查询一个条款
      * @param clauseId
      * @return
      */
-    @PostMapping("checkClauseById")
+    @PostMapping("wxcheckClauseById")
     @ResponseBody
-    public String checkClauseById(int clauseId){
+    public String wxcheckClauseById(@RequestParam("clauseId")int clauseId){
         ClauseVO clauseVO=statuteService.checkClauseById(clauseId);
         if(clauseVO!=null){
             return JSON.toJSONString(clauseVO);

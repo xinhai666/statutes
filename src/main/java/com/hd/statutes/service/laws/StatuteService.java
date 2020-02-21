@@ -126,4 +126,11 @@ public interface StatuteService {
      * @return
      */
     ClauseVO checkClauseById(int clauseId);
+
+    /**
+     * 修改法规
+     * @param clause
+     * @return
+     */
+    int updateClause(Clause clause);
 }

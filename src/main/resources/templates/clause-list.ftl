@@ -105,7 +105,7 @@
                     + "<td>" + data[i].clauseTitle + "</td>"
                     + "<td>" + data[i].statuteName + "</td>"
                     + "<td>" + data[i].clauseVersion + "</td>"
-                    + "<td class=\"f-14\"><a title=\"编辑\" href=\"javascript:;\" onclick=\"clause_up(this,'"+data[i].clauseId+"')\" class=\"ml-5\" style=\"text-decoration:none\">编辑</a>" +
+                    + "<td class=\"f-14\"><a title=\"编辑\" href='checkClauseById?clauseId="+data[i].clauseId+"' class=\"ml-5\" style=\"text-decoration:none\">编辑</a>" +
                     "<a title=\"删除\" href=\"javascript:;\" onclick=\"clause_del(this,'"+data[i].clauseId+"')\" class=\"ml-5\" style=\"text-decoration:none\">删除</a>" +
                     " </td></tr>"
                 )

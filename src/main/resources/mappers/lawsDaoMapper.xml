@@ -84,6 +84,12 @@
         select sta.statute_name,cla.* from clause cla join statute sta on cla.sta_id=sta.statute_id
         where cla.clause_id=#{clauseId}
     </select>
+    <update id="updateClause" parameterType="com.hd.statutes.model.entity.Clause">
+        update clause set sta_id=#{staId},clause_anothername=#{clauseAnothername},clause_antistop=#{clauseAntistop},
+        clause_content=#{clauseContent},clause_number=#{clauseNumber},
+        clause_title=#{clauseTitle},clause_version=#{clauseVersion},con_id=#{conId}
+        where clause_id=#{clauseId}
+    </update>
     <resultMap id="ClauseVO" type="com.hd.statutes.model.vo.ClauseVO">
         <id property="clauseId" column="clause_id"></id>
         <result property="staId" column="sta_id"></result>
