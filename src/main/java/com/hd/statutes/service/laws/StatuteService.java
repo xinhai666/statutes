@@ -133,4 +133,18 @@ public interface StatuteService {
      * @return
      */
     int updateClause(Clause clause);
+
+    /**
+     * 删除目录
+     * @param contentsId
+     * @return
+     */
+    int delContents(int contentsId);
+
+    /**
+     * 修改目录
+     * @param contents
+     * @return
+     */
+    int updateContents(Contents contents);
 }

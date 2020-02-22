@@ -10,7 +10,6 @@ public class Contents {
   private Integer staId;
   private Integer conId;
 
-
   public Integer getContentsId() {
     return contentsId;
   }
@@ -18,7 +17,6 @@ public class Contents {
   public void setContentsId(Integer contentsId) {
     this.contentsId = contentsId;
   }
-
 
   public Integer getContentsLevel() {
     return contentsLevel;
@@ -28,7 +26,6 @@ public class Contents {
     this.contentsLevel = contentsLevel;
   }
 
-
   public String getContentsName() {
     return contentsName;
   }
@@ -36,7 +33,6 @@ public class Contents {
   public void setContentsName(String contentsName) {
     this.contentsName = contentsName;
   }
-
 
   public Integer getContentsSerial() {
     return contentsSerial;
@@ -46,7 +42,6 @@ public class Contents {
     this.contentsSerial = contentsSerial;
   }
 
-
   public Integer getStaId() {
     return staId;
   }
@@ -55,7 +50,6 @@ public class Contents {
     this.staId = staId;
   }
 
-
   public Integer getConId() {
     return conId;
   }
@@ -63,5 +57,4 @@ public class Contents {
   public void setConId(Integer conId) {
     this.conId = conId;
   }
-
 }

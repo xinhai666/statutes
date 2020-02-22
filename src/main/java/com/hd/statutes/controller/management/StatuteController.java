@@ -212,4 +212,43 @@ public class StatuteController {
    public void updateClause(Clause clause){
         statuteService.updateClause(clause);
    }
+
+    /**
+     * 根据目录id删除目录
+     * @param contentsId
+     */
+    @PostMapping("delContents")
+    @ResponseBody
+    public String delContents(@RequestParam("contentsId") int contentsId) {
+        int num=statuteService.delContents(contentsId);
+        if(num>0){
+            return "true";
+        }else {
+            return "false";
+        }
+    }
+    /**
+     * 修改目录页面
+     */
+    @GetMapping("updateContentsPage")
+    public String updateContentsPage(@RequestParam("contentsId") int contentsId,HttpServletRequest request){
+        Contents contents=statuteService.getContentsById(contentsId);
+        request.setAttribute("contents",contents);
+        return "contents-update";
+    }
+
+    /**
+     * 修改目录
+     * @param contents
+     */
+    @PostMapping("updateContents")
+    @ResponseBody
+    public void updateContents(Contents contents){
+        int contentsLevel=1;
+        if(contents.getConId()>0){
+            contentsLevel=statuteService.getContentsById(contents.getConId()).getContentsLevel()+1;
+        }
+        contents.setContentsLevel(contentsLevel);
+        statuteService.updateContents(contents);
+    }
 }

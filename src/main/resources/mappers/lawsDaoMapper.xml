@@ -90,6 +90,13 @@
         clause_title=#{clauseTitle},clause_version=#{clauseVersion},con_id=#{conId}
         where clause_id=#{clauseId}
     </update>
+    <delete id="delContents">
+        delete from contents where contents_id=#{contentsId}
+    </delete>
+    <update id="updateContents" parameterType="com.hd.statutes.model.entity.Contents">
+        update contents set contents_level=#{contentsLevel},contents_name=#{contentsName},contents_serial=#{contentsSerial},
+        sta_id=#{staId},con_id=#{conId} where contents_id=#{contentsId}
+    </update>
     <resultMap id="ClauseVO" type="com.hd.statutes.model.vo.ClauseVO">
         <id property="clauseId" column="clause_id"></id>
         <result property="staId" column="sta_id"></result>

@@ -98,10 +98,13 @@
 
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">*首页法规图标：</label>
-			<div class="formControls col-xs-8 col-sm-9">
+			<div class="formControls col-xs-8 col-sm-9"  style="width:200px;">
 				<img id="logoImg" src="image/file.png"; alt="暂无图片" style="height:120px;width:150px;" />
 				<input type="file" name="logofile" id="logofile" style="position:absolute;top:0;left:0px; height:120px;width:150px;filter:alpha(opacity:0);opacity: 0" />
-				<input type="hidden" value="" id="statuteIconpath" name="statuteIconpath">
+				<input type="hidden" value="" id="statuteIconpath" name="statuteIconpath" style="height:120px;width:150px;">
+			</div>
+			<div class="text ">
+				<span style="font-size: 10px"><br><br>图片格式支持：jpg/png<br>图片尺寸：90*90px<br>图片大小：不超过50K</span>
 			</div>
 		</div>
 
@@ -168,24 +171,73 @@ $(function(){
 
 	//上传预览图片
 	$("#logofile").change(function () {
-		var fd=new FormData($("#form-article-add")[0]);
-		$.ajax({
-			type : "post",
-			url : "shangchuan",
-			data : fd,
-			contentType : false,// 告诉jQuery不要去设置Content-Type请求头
-			processData: false,// 告诉jQuery不要去处理发送的数据
-			success : function(data) {
-				$("#logoImg").attr('src',data);
-				$("#statuteIconpath").val(data);
-			},
-			error : function() {
-				layer.msg('操作失败!',{icon:1,time:1000});
+		//获取文件
+		var file = $('#logofile')[0];
+		//检测文件是否有效图片
+		var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.png)$");
+		console.log(file.value.toLowerCase());
+		if (!regex.test(file.value.toLowerCase())){
+			parent.layer.msg('图片格式不支持,请上传.jpg或.png图片');
+			return false;
+		}
+		var filesize=$('#logofile').get(0).files[0].size/1024;
+		if(filesize>50){
+			layer.alert('文件不能超过50KB，当前文件'+filesize+"KB");
+			return false;
+		}
+		//初始化FileReader对象
+		var reader = new FileReader();
+		//读取图片文件
+		reader.readAsDataURL(file.files[0]);
+		reader.onload = function (e) {
+			//初始化JavaScript图片对象
+			var image = new Image();
+			//FileReader获得Base64字符串
+			image.src = e.target.result;
+			image.onload = function () {
+				//获得图片高宽
+				var height = this.height;
+				var width = this.width;
+				console.log('图片高：'+height+" 图片宽："+width);
+				if(height>90||width>90){
+					parent.layer.msg('图片尺寸不大于90*90px');
+					return false;
+				}else {
+					var fd=new FormData($("#form-article-add")[0]);
+					$.ajax({
+						type : "post",
+						url : "shangchuan",
+						data : fd,
+						contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+						processData: false,// 告诉jQuery不要去处理发送的数据
+						success : function(data) {
+							$("#logoImg").attr('src',data);
+							$("#statuteIconpath").val(data);
+						},
+						error : function() {
+							layer.msg('操作失败!',{icon:1,time:1000});
+						}
+					});
+				}
 			}
-		});
+		}
 	});
 	//上传PDF
 	$("#btn_file").change(function () {
+		//获取文件
+		var file = $('#btn_file')[0];
+		//检测文件格式
+		var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.pdf)$");
+		console.log(file.value.toLowerCase());
+		if (!regex.test(file.value.toLowerCase())){
+			parent.layer.msg('请上传PDF格式的文件');
+			return false;
+		}
+		var filesize=$('#btn_file').get(0).files[0].size/1024/1024;
+		if(filesize>20){
+			layer.alert('文件不能超过20MB，当前文件'+filesize+"MB");
+			return false;
+		}
 		var fd=new FormData($("#form-article-add")[0]);
 		$.ajax({
 			type :"post",
@@ -197,7 +249,7 @@ $(function(){
 				$("#statutePdfLink").val(data);
 			},
 			error : function() {
-				layer.msg('操作失败!',{icon:1,time:1000});
+				layer.msg('上传文件失败!',{icon:1,time:1000});
 			}
 		});
 	})

@@ -47,4 +47,8 @@ public interface StatuteDao {
     ClauseVO checkClauseById(@Param("clauseId") int clauseId);
     //修改法规
     int updateClause(Clause clause);
+    //删除目录
+    int delContents(@Param("contentsId") int contentsId);
+    //修改目录
+    int updateContents(Contents contents);
 }

@@ -46,9 +46,15 @@
 						<td>女</td>
 					</#if>
 					<td>
-						<label><input name="userMember${u.userId}" type="radio" value="0" />免费</label>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<label><input name="userMember${u.userId}" type="radio" value="1" />付费</label>
+						<#if u.userMember==0>
+							<label><input name="userMember${u.userId}" type="radio" checked value="0" />免费</label>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label><input name="userMember${u.userId}" type="radio" value="1" />付费</label>
+						<#else>
+							<label><input name="userMember${u.userId}" type="radio" value="0" />免费</label>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label><input name="userMember${u.userId}" type="radio" checked value="1" />付费</label>
+						</#if>
 					</td>
 					<td>${(u.userCreatetime)?date}</td>
 					</tr>

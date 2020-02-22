@@ -57,11 +57,11 @@
   $(function () {
     $("#subt").click(function () {
       if($("#adminPhone").val().trim()==''){
-        alert("请输入登录手机号")
+        $("#fail").text("请输入登录手机号");
         return;
       }
       if($("#password").val().trim()==''){
-        alert("请输入密码")
+        $("#fail").text("请输入登录密码");
         return;
       }
       $("#adminlogin").ajaxSubmit({

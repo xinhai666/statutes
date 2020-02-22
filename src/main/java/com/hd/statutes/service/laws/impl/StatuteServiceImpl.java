@@ -95,6 +95,16 @@ public class StatuteServiceImpl implements StatuteService {
     }
 
     @Override
+    public int delContents(int contentsId) {
+        return statuteDao.delContents(contentsId);
+    }
+
+    @Override
+    public int updateContents(Contents contents) {
+        return statuteDao.updateContents(contents);
+    }
+
+    @Override
     public List<Statutestype> getAllStatype() {
         return statuteDao.getAllStatype();
     }

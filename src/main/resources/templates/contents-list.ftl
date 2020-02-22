@@ -33,13 +33,13 @@
 <div >
 	<div class="text-a">
 		法规类型：<select  class="input-text" style="width:150px" id="statutestypeId" name="statutestypeId" >
-			<option value="-1">请选择</option>
+			<option value="0">请选择</option>
 		</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		所属分支：<select  class="input-text" style="width:150px" id="statutesplitId" name="statutesplitId" >
-			<option value="-1">请选择</option>
+			<option value="0">请选择</option>
 			</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		法规名：<select  class="input-text" style="width:250px" id="statuteId" name="statuteId" >
-			<option value="-1">请选择</option>
+			<option value="0">请选择</option>
 		</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<input type="button" value="确 定" class="btn" onclick="getAll()">
 	</div>
@@ -106,8 +106,8 @@
 								"<tr class='text-c' conid='"+data[i].contentsId+"' id="+data[i].contentsId+"><td>＋"
 								+ data[i].contentsName + "</td><td>"
 								+ data[i].contentsSerial + "</td><td>"
-								+ "<a title='编辑' href='javascript:;' onclick='statute_up(this," + data[i].contentsId + ")'>编辑</a>"
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='statute_del(this," + data[i].contentsId + ")'>删除</a>"
+								+ "<a title='编辑' href='updateContentsPage?contentsId="+data[i].contentsId+"'>编辑</a>"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='content_del(this," + data[i].contentsId + ")'>删除</a>"
 								+ "</td></tr>"
 						)
 					}
@@ -120,8 +120,8 @@
 											"<tr class='text-c' staId='"+data[i].contentsId+"'><td><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
 											+ data[i].contentsName + "</td><td>"
 											+ data[i].contentsSerial + "</td><td>"
-											+ "<a title='编辑' href='javascript:;' onclick='statute_up(this," + data[i].contentsId + ")'>编辑</a>"
-											+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='statute_del(this," + data[i].contentsId + ")'>删除</a>"
+											+ "<a title='编辑' href='updateContentsPage?contentsId="+data[i].contentsId+"'>编辑</a>"
+											+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='content_del(this," + data[i].contentsId + ")'>删除</a>"
 											+ "</td></tr>"
 									)
 								}
@@ -131,8 +131,7 @@
 				}
 			},
 			error: function(xhr) {
-				var alertMsg = "请求失败！<br/>" + xhr.status + "(" + xhr.statusText + ")";
-				alert(alertMsg); // 这里使用JavaScript的原生API对错误信息进行了简单提示，具体项目UI框架、UI风格等不一致，需根据具体情况改写
+				layer.msg('请求数据失败!',{icon:2,time:1000});
 			}
 		});
 		$('.table-sort').dataTable({
@@ -143,53 +142,11 @@
 				{"orderable":false,"aTargets":[2]}// 制定列不参与排序
 			]
 		});
-		/****************/
-		/*$.getJSON('getAllContentsByStatuteId',{'contentsLevel':1,'staId':staId},function (data) {
-			if(data!=null){
-				for(var i=0;i<data.length;i++) {
-					$("#contsTap").append(
-							"<tr class='text-c' conid='"+data[i].contentsId+"' id="+data[i].contentsId+"><td>＋"
-							+ data[i].contentsName + "</td><td>"
-							+ data[i].contentsSerial + "</td><td>"
-							+ "<a title='编辑' href='javascript:;' onclick='statute_up(this," + data[i].contentsId + ")'>编辑</a>"
-							+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='statute_del(this," + data[i].contentsId + ")'>删除</a>"
-							+ "</td></tr>"
-					)
-				}
-			}else {
-				return
-			}
-			$('#contsTap tr').each(function(i){//遍历tr
-				var conId=$(this).attr('conid');
-				$.getJSON('getAllContentsByStatuteId',{'contentsLevel':2,'conId':conId,'staId':staId},function (data) {
-					if(data!=null){
-						for(var i=data.length-1;i>=0;i--) {
-							$("#"+conId).after(
-									"<tr class='text-c' staId='"+data[i].contentsId+"'><td><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
-									+ data[i].contentsName + "</td><td>"
-									+ data[i].contentsSerial + "</td><td>"
-									+ "<a title='编辑' href='javascript:;' onclick='statute_up(this," + data[i].contentsId + ")'>编辑</a>"
-									+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='statute_del(this," + data[i].contentsId + ")'>删除</a>"
-									+ "</td></tr>"
-							)
-						}
-					}
-				});
-			});
-			$('.table-sort').dataTable({
-				"aaSorting": [[ 1, "asc" ]],//默认第几个排序
-				"bStateSave": true,//状态保存
-				"aoColumnDefs": [
-					//{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
-					{"orderable":false,"aTargets":[2]}// 制定列不参与排序
-				]
-			});
-		});*/
 	}
 
 	$(function () {
 		/*加载法规*/
-		/*getAll();*/
+		// getAll();
 		/*获得所有法规类型*/
 		$.getJSON('getAllStatype',function (data) {
 			if(data!=null){
@@ -233,12 +190,12 @@
 	});
 
 	/*-删除*/
-	function statute_del(obj,id){
+	function content_del(obj,id){
 		layer.confirm('确认要删除吗？',function(index){
 			$.ajax({
 				type: 'POST',
-				url: '',
-				dataType: 'json',
+				url: 'delContents',
+				data:{'contentsId':id},
 				success: function(data){
 					$(obj).parents("tr").remove();
 					layer.msg('已删除!',{icon:1,time:1000});
