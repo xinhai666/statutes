@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper
 public interface StatuteDao {
-    //查询法规
+    //查询法规集合
     List<StatuteVO> getAllStatutes(@Param("statutestypeId") int statutestypeId, @Param("statutesplitId") int statutesplitId);
     //查询所有规章类型
     List<Statutestype> getAllStatype();
@@ -28,6 +28,10 @@ public interface StatuteDao {
     int delStatueSplitById(@Param("statutesplitId") int statutesplitId);
     //添加法规
     int addStatute(Statute statute);
+    //查询一个法规实体
+    Statute getStatuteById(@Param("statuteId")int statuteId);
+    //修改法规
+    int updateStatute(Statute statute);
 
     //根据法规查询所有目录
     List<Contents> getAllContentsByStatuteId(@Param("contentsLevel") int contentsLevel,@Param("conId") int conId,@Param("staId") int staId );
@@ -41,7 +45,7 @@ public interface StatuteDao {
     int addClause(Clause clause);
     //根据法规查询条款
     List<ClauseVO> getClauseVoBystaId(@Param("staId") int staId);
-    //删除法规
+    //删除条款
     int delClauseById(@Param("clauseId")int clauseId);
     //查询一条法规
     ClauseVO checkClauseById(@Param("clauseId") int clauseId);
@@ -51,4 +55,6 @@ public interface StatuteDao {
     int delContents(@Param("contentsId") int contentsId);
     //修改目录
     int updateContents(Contents contents);
+    //删除法规
+    int delStatuteById(@Param("statuteId") int statuteId);
 }

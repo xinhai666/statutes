@@ -50,7 +50,6 @@
 		<table class="table table-border table-bordered table-hover table-bg table-sort" id="stabs">
 			<thead>
 			<tr class="text-c">
-				<th ><input type="checkbox" name="" value=""></th>
 				<th >部号</th>
 				<th >法规部号别名</th>
 				<th >版本号</th>
@@ -99,7 +98,7 @@
 						statutesplitName='无';
 					}
 					$("#stabs").append(
-							"<tr class='text-c'><td><input type='checkbox' value=" + data[i].statuteId + " name='statuteId'></td><td>"
+							"<tr class='text-c'><td>"
 							+ data[i].statutePartno + "</td><td>"
 							+ data[i].statuteAlias + "</td><td>"
 							+ data[i].statuteVersion + "</td><td>"
@@ -107,7 +106,7 @@
 							+ statutestypeName + "</td><td>"
 							+ statutesplitName + "</td><td>"
 							+ statuteReveal+"</td><td>"
-							+ "<a title='编辑' href='javascript:;' onclick='statute_up(this," + data[i].statuteId + ")'>编辑</a>"
+							+ "<a title='编辑' href='getStatuteById?statuteId="+data[i].statuteId+"'>编辑</a>"
 							+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='statute_del(this," + data[i].statuteId + ")'>删除</a>"
 							+ "</td></tr>"
 					)
@@ -118,7 +117,7 @@
 				"bStateSave": true,//状态保存
 				"aoColumnDefs": [
 					//{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
-					{"orderable":false,"aTargets":[0,8]}// 制定列不参与排序
+					{"orderable":false,"aTargets":[7]}// 制定列不参与排序
 				]
 			});
 		});
@@ -155,20 +154,24 @@
 
 	/*-删除*/
 	function statute_del(obj,id){
-		layer.confirm('确认要删除吗？',function(index){
-			$.ajax({
-				type: 'POST',
-				url: '',
-				dataType: 'json',
-				success: function(data){
-					$(obj).parents("tr").remove();
-					layer.msg('已删除!',{icon:1,time:1000});
-				},
-				error:function(data) {
-					console.log(data.msg);
-				},
+		var delVerify = prompt("会同时删除该法规的所有目录和条款且不可恢复！确认删除请输入'OK'","");
+		if(delVerify=='ok'||delVerify=='OK'){
+			layer.confirm('确认要删除吗？',function(index){
+				$.ajax({
+					type: 'POST',
+					url: 'delStatuteById',
+					data:{'statuteId':id},
+					success: function(data){
+						$(obj).parents("tr").remove();
+						layer.msg('已删除!',{icon:1,time:1000});
+					},
+					error:function(data) {
+						layer.msg('删除失败!',{icon:2,time:1000});
+						console.log(data.msg);
+					},
+				});
 			});
-		});
+		}
 	}
 </script>
 </body>

@@ -97,6 +97,17 @@
         update contents set contents_level=#{contentsLevel},contents_name=#{contentsName},contents_serial=#{contentsSerial},
         sta_id=#{staId},con_id=#{conId} where contents_id=#{contentsId}
     </update>
+    <select id="getStatuteById" resultMap="statute">
+        select * from statute where statute_id=#{statuteId}
+    </select>
+    <update id="updateStatute" parameterType="com.hd.statutes.model.entity.Statute">
+        update statute set statute_name=#{statuteName},statp_id=#{statpId},stasp_id=#{staspId},statute_pdf_link=#{statutePdfLink},
+        statute_alias=#{statuteAlias},statute_explain=#{statuteExplain},statute_iconpath=#{statuteIconpath},statute_partno=#{statutePartno},
+        statute_pdf_name=#{statutePdfName},statute_reveal=#{statuteReveal},statute_version=#{statuteVersion} where statute_id=#{statuteId}
+    </update>
+    <delete id="delStatuteById">
+        delete from statute where statute_id=#{statuteId}
+    </delete>
     <resultMap id="ClauseVO" type="com.hd.statutes.model.vo.ClauseVO">
         <id property="clauseId" column="clause_id"></id>
         <result property="staId" column="sta_id"></result>
@@ -143,7 +154,7 @@
         <result property="statuteIconpath" column="statute_iconpath"></result>
         <result property="statutePdfName" column="statute_pdf_name"></result>
         <result property="statutePdfLink" column="statute_pdf_link"></result>
-        <result property="statuteExplain" column="statuteExplain"></result>
+        <result property="statuteExplain" column="statute_explain"></result>
     </resultMap>
 
     <resultMap id="statuteVO" type="com.hd.statutes.model.vo.StatuteVO">

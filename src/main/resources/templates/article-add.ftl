@@ -215,7 +215,7 @@ $(function(){
 							$("#statuteIconpath").val(data);
 						},
 						error : function() {
-							layer.msg('操作失败!',{icon:1,time:1000});
+							layer.msg('操作失败!',{icon:2,time:1000});
 						}
 					});
 				}
@@ -249,7 +249,7 @@ $(function(){
 				$("#statutePdfLink").val(data);
 			},
 			error : function() {
-				layer.msg('上传文件失败!',{icon:1,time:1000});
+				layer.msg('上传文件失败!',{icon:2,time:1000});
 			}
 		});
 	})
@@ -338,7 +338,7 @@ $(function(){
 				layer.msg('添加完成!',{icon:1,time:1000});
 			},
 			error : function() {
-				layer.msg('操作失败!',{icon:1,time:1000});
+				layer.msg('操作失败!',{icon:2,time:1000});
 			}
 		});
 	})

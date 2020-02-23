@@ -105,6 +105,21 @@ public class StatuteServiceImpl implements StatuteService {
     }
 
     @Override
+    public Statute getStatuteById(int statuteId) {
+        return statuteDao.getStatuteById(statuteId);
+    }
+
+    @Override
+    public int updateStatute(Statute statute) {
+        return statuteDao.updateStatute(statute);
+    }
+
+    @Override
+    public int delStatuteById(int statuteId) {
+        return statuteDao.delStatuteById(statuteId);
+    }
+
+    @Override
     public List<Statutestype> getAllStatype() {
         return statuteDao.getAllStatype();
     }

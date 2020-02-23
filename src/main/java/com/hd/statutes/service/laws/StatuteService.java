@@ -147,4 +147,25 @@ public interface StatuteService {
      * @return
      */
     int updateContents(Contents contents);
+
+    /**
+     * 查询一个法规实体
+     * @param statuteId
+     * @return
+     */
+    Statute getStatuteById(int statuteId);
+
+    /**
+     * 修改法规
+     * @param statute
+     * @return
+     */
+    int updateStatute(Statute statute);
+
+    /**
+     * 删除法规
+     * @param statuteId
+     * @return
+     */
+    int delStatuteById(int statuteId);
 }

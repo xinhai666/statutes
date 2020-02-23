@@ -251,4 +251,43 @@ public class StatuteController {
         contents.setContentsLevel(contentsLevel);
         statuteService.updateContents(contents);
     }
+
+    /**
+     * 查询一条法规
+     * @param statuteId
+     * @return
+     */
+    @GetMapping("getStatuteById")
+    public String getStatuteById(@RequestParam("statuteId") int statuteId,HttpServletRequest request){
+        Statute statute=statuteService.getStatuteById(statuteId);
+        System.out.println(statute.getStatuteExplain());
+        request.setAttribute("statute",statute);
+        return "article-update";
+    }
+
+    /**
+     * 修改法规
+     * @param statute
+     * @return
+     */
+    @PostMapping("updateStatute")
+    @ResponseBody
+    public String updateStatute(Statute statute){
+        int num=statuteService.updateStatute(statute);
+        if(num>0){
+            return "true";
+        }else {
+            return "false";
+        }
+    }
+    @PostMapping("delStatuteById")
+    @ResponseBody
+    public String delStatuteById(int statuteId){
+        int num=statuteService.delStatuteById(statuteId);
+        if(num>0){
+            return "true";
+        }else {
+            return "false";
+        }
+    }
 }
