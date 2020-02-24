@@ -134,7 +134,7 @@ $(function(){
 				$("#sitesLogo").val(data);
 			},
 			error : function() {
-				layer.msg('操作失败!',{icon:1,time:1000});
+				layer.msg('上传图片失败!',{icon:2,time:1000});
 			}
 		});
 	})
@@ -171,7 +171,7 @@ $(function(){
 					layer.msg('保存完成!',{icon:1,time:1000});
 				},
 				error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('error!',{icon:1,time:1000});
+					layer.msg('保存出错!',{icon:2,time:1000});
 				}
 			});
 		}

@@ -62,4 +62,14 @@ public class UsersServiceImpl implements UsersService {
         return usersDao.adminLogin(admins);
     }
 
+    @Override
+    public Users userLogin(String userPhone, String password) {
+        return usersDao.userLogin(userPhone,password);
+    }
+
+    @Override
+    public int addUsers(String userName, String userPhone, String password) {
+        return usersDao.addUsers(userName,userPhone,password);
+    }
+
 }

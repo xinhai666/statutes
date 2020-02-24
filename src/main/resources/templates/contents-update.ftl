@@ -30,7 +30,7 @@
 	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
 <article class="page-container">
-	<input type="button" class="btn btn-secondary radius" onclick="history.go(-1)" value="&nbsp;返 回&nbsp;" /></span>
+	<input type="button" class="btn" onclick="history.go(-1)" value="&nbsp;返 回&nbsp;" /></span>
 	<input type="hidden" id="staId" value="${contents.staId!}">
 	<input type="hidden" id="conId" value="${contents.conId!}">
 	<form class="form form-horizontal" id="form-contents-update">

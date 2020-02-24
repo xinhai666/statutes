@@ -78,14 +78,6 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
-	$('.table-sort').dataTable({
-		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
-		"bStateSave": false,//状态保存
-		"aoColumnDefs": [
-			//{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
-			{"orderable":false,"aTargets":[2]}// 制定列不参与排序
-		]
-	});
 	function getAll(){
 		$(".table-sort").dataTable().fnDestroy();//还原初始化了datatable
 		var staId=$("#statuteId").val();
@@ -103,31 +95,14 @@
 				if(data!=null){
 					for(var i=0;i<data.length;i++) {
 						$("#contsTap").append(
-								"<tr class='text-c' conid='"+data[i].contentsId+"' id="+data[i].contentsId+"><td>＋"
-								+ data[i].contentsName + "</td><td>"
+								"<tr class='text-c' conid='"+data[i].conId+"' id="+data[i].contentsId+"><td onclick='subdirectory(this,"+data[i].contentsId+")' style='text-align:left'><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
+								+"<span spid="+data[i].contentsId+">＋</span>"+ data[i].contentsName + "</td><td>"
 								+ data[i].contentsSerial + "</td><td>"
 								+ "<a title='编辑' href='updateContentsPage?contentsId="+data[i].contentsId+"'>编辑</a>"
 								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='content_del(this," + data[i].contentsId + ")'>删除</a>"
 								+ "</td></tr>"
 						)
 					}
-					$('#contsTap tr').each(function(i){//遍历tr
-						var conId=$(this).attr('conid');
-						$.getJSON('getAllContentsByStatuteId',{'contentsLevel':2,'conId':conId,'staId':staId},function (data) {
-							if(data!=null){
-								for(var i=data.length-1;i>=0;i--) {
-									$("#"+conId).after(
-											"<tr class='text-c' staId='"+data[i].contentsId+"'><td><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
-											+ data[i].contentsName + "</td><td>"
-											+ data[i].contentsSerial + "</td><td>"
-											+ "<a title='编辑' href='updateContentsPage?contentsId="+data[i].contentsId+"'>编辑</a>"
-											+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='content_del(this," + data[i].contentsId + ")'>删除</a>"
-											+ "</td></tr>"
-									)
-								}
-							}
-						});
-					});
 				}
 			},
 			error: function(xhr) {
@@ -135,18 +110,44 @@
 			}
 		});
 		$('.table-sort').dataTable({
-			"aaSorting": [[ 1, "asc" ]],//默认第几个排序
-			"bStateSave": false,//状态保存
-			"aoColumnDefs": [
-				//{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
-				{"orderable":false,"aTargets":[2]}// 制定列不参与排序
-			]
+			"bStateSave": true,//状态保存
+			"ordering": false, // 禁止排序
+		});
+	}
+
+	function subdirectory(obj,id){
+		$(".table-sort").dataTable().fnDestroy();//还原初始化了datatable
+		var staId=$("#statuteId").val();
+		$("tr[conid="+id+"]").remove();
+		$("span[spid="+id+"]").html(" ");
+		$.getJSON('getAllContentsByStatuteId',{'conId':id,'staId':staId},function (data) {
+			for(var i=data.length-1;i>=0;i--) {
+				var blanks="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+				if(data[i].conId==id){
+					$("span[spid="+id+"]").html("－");
+				}
+				for(var j=0;j<data[i].contentsLevel;j++){
+					blanks=blanks+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+				}
+				$(obj).parents("tr").after(
+						"<tr class='text-c' conid='"+id+"' staId='"+data[i].contentsId+"'><td onclick='subdirectory(this,"+data[i].contentsId+")' style='text-align: left'><span>"+blanks+"</span>"
+						+ "<span spid="+data[i].contentsId+">＋</span>"+data[i].contentsName + "</td><td>"
+						+ data[i].contentsSerial + "</td><td>"
+						+ "<a title='编辑' href='updateContentsPage?contentsId="+data[i].contentsId+"'>编辑</a>"
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='content_del(this," + data[i].contentsId + ")'>删除</a>"
+						+ "</td></tr>"
+				)
+			}
+			$('.table-sort').dataTable({
+				"bStateSave": true,//状态保存
+				"ordering": false, // 禁止排序
+			});
 		});
 	}
 
 	$(function () {
 		/*加载法规*/
-		// getAll();
+		 getAll();
 		/*获得所有法规类型*/
 		$.getJSON('getAllStatype',function (data) {
 			if(data!=null){

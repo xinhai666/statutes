@@ -26,10 +26,10 @@
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 法规类型管理-分支管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-	<input type="hidden" value="${(statutestype.statutestypeId)!}" id="statutestypeId" name="statutesplitId">
+	<input type="hidden" value="${(statutestype.statutestypeId)!}" id="statutestypeId" name="statutestypeId">
 	<div class="cl pd-5 bg-1 bk-gray mt-10">
 		<input type="button" class="btn" style="float: right" onclick="history.go(-1)" value="返回" /></span>
-		<span class="l"><a href="javascript:;" onclick="admin_add('添加法规主分支','stasplitAdd?statutestypeId=${(statutestype.statutestypeId)!}','500','200')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加主分支</a></span>
+		<div><a data-target='#myModal' data-toggle='modal' href="javascript:;" class="btn btn-primary radius">添加主分支</a></div>
 	</div>
 	<table class="table table-border table-bordered table-bg">
 		<thead>
@@ -46,6 +46,33 @@
 
 		</tbody>
 	</table>
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top: 20vh;">
+		<div class="modal-dialog">
+			<form class="form form-horizontal" id="form-statype-add">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">添加分支</h4>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-3">分支名称:</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<input style="width: 60%" type="text" class="input-text" placeholder="新分支名称" id="statutesplitName" name="statutesplitName">
+							<p><br></p>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<p align="center">
+							<input type="button" style="display: none" id="closemodel" data-dismiss="modal" value="关闭"></input>
+							<input class="btn btn-primary radius" type="button" id="subt" value="&nbsp;&nbsp;添加&nbsp;&nbsp;">
+						</p>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
 </div>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
@@ -59,7 +86,53 @@
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
 	$(function () {
-		/*获得所分支*/
+		getSplits();
+		//添加主分支
+		$("#subt").click(function () {
+			var statutesplitName=$("#statutesplitName").val().trim();
+			var statutestypeId=$("#statutestypeId").val();
+			if(statutesplitName==''||statutesplitName==null){
+				layer.msg('请输入分支名称！',{icon:2,time:1200});
+				return;
+			}
+			$.ajax({
+				type:'post',
+				url:'addStaSplit',
+				data:{'statutesplitName':statutesplitName,'statpId':statutestypeId},
+				success: function(data){
+					layer.msg('添加完成!',{icon:1,time:1000});
+					$("#splittb").empty();
+					getSplits();
+					$("#closemodel").click();
+				},
+				error: function(XmlHttpRequest, textStatus, errorThrown){
+					layer.msg('添加数据失败!',{icon:2,time:1000});
+				}
+			})
+		});
+
+	});
+
+	/*删除*/
+	function admin_del(obj,id){
+		layer.confirm('确认要删除吗？',function(index){
+			$.ajax({
+				type: 'POST',
+				url: 'delStatueSplitById',
+				data:{'statutesplitId':id},
+				dataType: 'json',
+				success: function(data){
+					$(obj).parents("tr").remove();
+					layer.msg('已删除!',{icon:1,time:1000});
+				},
+				error:function(data) {
+					console.log(data.msg);
+				},
+			});
+		});
+	}
+	/*获得所分支*/
+	function getSplits() {
 		$.getJSON('getAllStaSplit',{'statutestypeId':$("#statutestypeId").val()},function (data) {
 			if(data!=null){
 				for(var i=0;i<data.length;i++){
@@ -74,43 +147,7 @@
 				}
 			}
 		});
-	})
-
-/*
-	参数解释：
-	title	标题
-	url		请求的url
-	id		需要操作的数据id
-	w		弹出层宽度（缺省调默认值）
-	h		弹出层高度（缺省调默认值）
-*/
-/*增加*/
-function admin_add(title,url,w,h){
-	layer_show(title,url,w,h);
-}
-/*删除*/
-function admin_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
-		$.ajax({
-			type: 'POST',
-			url: 'delStatueSplitById',
-			data:{'statutesplitId':id},
-			dataType: 'json',
-			success: function(data){
-				$(obj).parents("tr").remove();
-				layer.msg('已删除!',{icon:1,time:1000});
-			},
-			error:function(data) {
-				console.log(data.msg);
-			},
-		});		
-	});
-}
-
-/*管理员-编辑*/
-function admin_edit(title,url,id,w,h){
-	layer_show(title,url,w,h);
-}
+	}
 </script>
 </body>
 </html>

@@ -169,7 +169,7 @@ public class StatuteController {
      */
     @PostMapping("getClauseVoBystaId")
     @ResponseBody
-    public String getClauseVoBystaId(@RequestParam("staId") int staId){
+    public String getClauseVoBystaId(@RequestParam(value = "staId",defaultValue = "0") int staId){
         List<ClauseVO> list=statuteService.getClauseVoBystaId(staId);
         return JSON.toJSONString(list);
     }
@@ -260,7 +260,6 @@ public class StatuteController {
     @GetMapping("getStatuteById")
     public String getStatuteById(@RequestParam("statuteId") int statuteId,HttpServletRequest request){
         Statute statute=statuteService.getStatuteById(statuteId);
-        System.out.println(statute.getStatuteExplain());
         request.setAttribute("statute",statute);
         return "article-update";
     }

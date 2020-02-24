@@ -38,19 +38,7 @@
 				<th width="20">操作</th>
 			</tr>
 			</thead>
-			<tbody>
-			<#list consultsList as c>
-				<tr class="text-c">
-					<td>${c.consultUserName!}</td>
-					<td>${c.consultContent!}</td>
-					<td>${c.consultCreatetime?datetime!}</td>
-					<td>${c.consultPhone!}</td>
-					<td class="td-manage"><a title="查看" href="javascript:;" onclick="consult_show('查看','consultShow?consultId=${c.consultId}','${c.consultId}','','300')" style="text-decoration:none">查看</a>
-						&nbsp;&nbsp;
-						<a title="删除" href="javascript:;" onclick="consult_del(this,'${c.consultId}')" class="ml-5" style="text-decoration:none">删除</a></td>
-					</td>
-				</tr>
-			</#list>
+			<tbody id="consultstd">
 			</tbody>
 		</table>
 	</div>
@@ -68,13 +56,40 @@
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
 	$(function(){
-		$('.table-sort').dataTable({
-			"aaSorting": [[ 2, "desc" ]],//默认第几个排序
-			"bStateSave": true,//状态保存
-			"aoColumnDefs": [
-				//{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-				{"orderable":false,"aTargets":[1,4]}// 制定列不参与排序
-			]
+		$.ajax({
+			url:'getAllConsultsByUserId',
+			type: 'post',
+			dataType:'json',
+			success:function (data) {
+				for(var i=0;i<data.length;i++){
+					var content=data[i].consultContent;
+					if(content.length>30){
+						content=content.substring(0,20)+"……";
+					}
+					$("#consultstd").append(
+							"<tr class=\"text-c\">"+
+							"<td>"+data[i].consultUserName+"</td>"+
+							"<td style='text-align: left'>"+content+"</td>"+
+							"<td>"+data[i].consultCreatetime+"</td>"+
+							"<td>"+data[i].consultPhone+"</td>"+
+							"<td class=\"td-manage\"><a title=\"查看\" href=\"javascript:;\" onclick=\"consult_show('查看','consultShow?consultId="+data[i].consultId+"','"+data[i].consultId+"','','390')\" style=\"text-decoration:none\">查看</a>" +
+							"&nbsp;&nbsp;" +
+							"<a title=\"删除\" href=\"javascript:;\" onclick=\"consult_del(this,'"+data[i].consultId+"')\" class=\"ml-5\" style=\"text-decoration:none\">删除</a></td>" +
+							"</tr>"
+					)
+				}
+				$('.table-sort').dataTable({
+					"aaSorting": [[ 2, "desc" ]],//默认第几个排序
+					"bStateSave": true,//状态保存
+					"aoColumnDefs": [
+						//{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+						{"orderable":false,"aTargets":[1,4]}// 制定列不参与排序
+					]
+				});
+			},
+			error:function () {
+				layer.msg('加载数据异常!',{icon:2,time:1000});
+			}
 		});
 
 	});

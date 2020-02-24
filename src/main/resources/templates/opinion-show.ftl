@@ -19,15 +19,14 @@
 <title>查看咨询</title>
 </head>
   <body>
-  <div class="pd-20" style="height: 160px">
+  <div class="pd-20" style="height: 200px">
     <table class="table">
       <tbody>
         <tr>
-          <th >咨询内容：</th>
-          <td>
-            ${opinions.opinionContent!}<br>
+          <th width="60">咨询内容：</th>
+          <td style="text-align: left">
+            ${opinions.opinionContent!}
         </tr>
-        <tr><td></td></tr>
       </tbody>
     </table>
   </div>

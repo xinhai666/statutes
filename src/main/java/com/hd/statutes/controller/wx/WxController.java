@@ -1,10 +1,7 @@
 package com.hd.statutes.controller.wx;
 
 import com.alibaba.fastjson.JSON;
-import com.hd.statutes.model.entity.Admins;
-import com.hd.statutes.model.entity.Clause;
-import com.hd.statutes.model.entity.Contents;
-import com.hd.statutes.model.entity.Statute;
+import com.hd.statutes.model.entity.*;
 import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.model.vo.StatuteVO;
 import com.hd.statutes.service.laws.StatuteService;
@@ -86,6 +83,55 @@ public class WxController {
         String listStr=JSON.toJSONString(list);
         System.out.println(listStr);
         return listStr;
+    }
+
+    /**
+     * 用户登录
+     * @param userPhone
+     * @param password
+     * @return
+     */
+    @PostMapping("wxUserLogin")
+    @ResponseBody
+    public String wxUserLogin(@RequestParam("userPhone") String userPhone,@RequestParam("password") String password){
+        Users user=usersService.userLogin(userPhone,password);
+        System.out.println(user.getUserName());
+        if(user!=null){
+            return JSON.toJSONString(user);
+        }else {
+            return "";
+        }
+    }
+
+    /**
+     * 查询用户咨询历史
+     * @param userId
+     * @param request
+     * @return
+     */
+    @PostMapping("wxGetAllConsultsByUserId")
+    @ResponseBody
+    public String wxGetAllConsultsByUserId(@RequestParam(value = "userId",defaultValue = "0") int userId, HttpServletRequest request){
+        List<Consults> consultsList=usersService.getAllConsultsByUserId(userId);
+        return JSON.toJSONString(consultsList);
+    }
+
+    /**
+     * 用户注册
+     * @param userName
+     * @param userPhone
+     * @param password
+     * @return
+     */
+    @PostMapping("wxAddUsers")
+    @ResponseBody
+    public String wxAddUsers(@RequestParam("userName")String userName, @RequestParam("userPhone")String userPhone, @RequestParam("password")String password){
+        int num=usersService.addUsers(userName,userPhone,password);
+        if(num>0){
+            return "注册完成";
+        }else {
+            return "注册失败";
+        }
     }
 
 }

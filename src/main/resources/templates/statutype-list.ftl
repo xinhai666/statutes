@@ -25,8 +25,35 @@
 </head>
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 法规类型管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top: 20vh;">
+	<div class="modal-dialog">
+		<form class="form form-horizontal" id="form-statype-add">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">添加法规类型</h4>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3">法规类型名称:</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input style="width: 60%" type="text" class="input-text" placeholder="新法规类型名称" id="statutestypeName" name="statutestypeName">
+						<p><br></p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<p align="center">
+						<input type="button" style="display: none" id="closemodel" data-dismiss="modal" value="关闭"></input>
+						<input class="btn btn-primary radius" type="button" id="subt" value="&nbsp;&nbsp;添加&nbsp;&nbsp;">
+					</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
 <div class="page-container">
-	<div class="cl pd-5 bg-1 bk-gray mt-10"> <span class="l"><a href="javascript:;" onclick="admin_add('添加法规类型','statutetypeAdd','500','200')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加法规类型</a></span></div>
+	<div><a data-target='#myModal' data-toggle='modal' href="javascript:;" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加法规类型</a></div>
 	<table class="table table-border table-bordered table-bg">
 		<thead>
 			<tr>
@@ -55,7 +82,49 @@
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
 	$(function () {
-		/*获得所有法规类型*/
+		getStatypes();
+		//添加类型
+		$("#subt").click(function () {
+			var statutestypeName=$("#statutestypeName").val().trim();
+			if(statutestypeName==''||statutestypeName==null){
+				layer.msg('请输入类型名称！',{icon:2,time:1200});
+				return;
+			}
+			$.ajax({
+				type:'post',
+				url:'addSatatueType',
+				data:{'statutestypeName':statutestypeName},
+				success: function(data){
+					layer.msg('添加完成!',{icon:1,time:1000});
+					$("#typetb").empty();
+					getStatypes();
+					$("#closemodel").click();
+				},
+				error: function(XmlHttpRequest, textStatus, errorThrown){
+					layer.msg('error!',{icon:2,time:1000});
+				}
+			})
+		});
+	});
+	/*删除*/
+	function admin_del(obj,id){
+		layer.confirm('确认要删除吗？',function(index){
+			$.ajax({
+				type: 'POST',
+				url: 'delStatueTypeById',
+				data:{'statutestypeId':id},
+				success: function(data){
+					$(obj).parents("tr").remove();
+					layer.msg('已删除!',{icon:1,time:1000});
+				},
+				error:function(data) {
+					console.log(data.msg);
+				},
+			});
+		});
+	}
+	/*获得所有法规类型*/
+	function getStatypes(){
 		$.getJSON('getAllStatype',function (data) {
 			if(data!=null){
 				for(var i=0;i<data.length;i++){
@@ -69,43 +138,8 @@
 					)
 				}
 			}
-		});
-	})
-
-/*
-	参数解释：
-	title	标题
-	url		请求的url
-	id		需要操作的数据id
-	w		弹出层宽度（缺省调默认值）
-	h		弹出层高度（缺省调默认值）
-*/
-/*增加*/
-function admin_add(title,url,w,h){
-	layer_show(title,url,w,h);
-}
-/*删除*/
-function admin_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
-		$.ajax({
-			type: 'POST',
-			url: 'delStatueTypeById',
-			data:{'statutestypeId':id},
-			success: function(data){
-				$(obj).parents("tr").remove();
-				layer.msg('已删除!',{icon:1,time:1000});
-			},
-			error:function(data) {
-				console.log(data.msg);
-			},
-		});
-	});
-}
-
-/*管理员-编辑*/
-function admin_edit(title,url,id,w,h){
-	layer_show(title,url,w,h);
-}
+		})
+	};
 </script>
 </body>
 </html>

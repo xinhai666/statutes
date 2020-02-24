@@ -19,23 +19,23 @@
 <title>查看咨询</title>
 </head>
   <body>
-  <div class="pd-20" style="height: 160px">
+  <div class="pd-20" style="height: 260px">
     <table class="table">
       <tbody>
         <tr>
-          <th>咨询人：</th>
-          <td><span>${consults.consultUserName!}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>${consults.consultPhone!}</span></td>
+          <th width="80">咨询人：</th>
+          <td style='text-align: left'><span>${consults.consultUserName!}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>${consults.consultPhone!}</span></td>
         </tr>
         <tr><td></td></tr>
         <tr>
           <th >咨询内容：</th>
-          <td>
+          <td style='text-align: left'>
             ${consults.consultContent!}<br>
         </tr>
         <tr><td></td></tr>
         <tr>
           <th>相关条款：</th>
-          <td>${consults.consultClauseNumbers!}</td>
+          <td style='text-align: left'>${consults.consultClauseNumbers!}</td>
         </tr>
       </tbody>
     </table>

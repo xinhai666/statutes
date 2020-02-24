@@ -18,11 +18,11 @@ public class OthersController {
     @Autowired
     private OthersService othersService;
 
-    @GetMapping("getAllOpinions")//查询所有意见
-    public String getAllOpinions(HttpServletRequest request){
+    @PostMapping("getAllOpinions")//查询所有意见
+    @ResponseBody
+    public String getAllOpinions(){
         List<Opinions> opinionsList=othersService.getAllOpinions();
-        request.setAttribute("opinionsList",opinionsList);
-        return "opinion_list";
+        return JSON.toJSONString(opinionsList);
     }
     @GetMapping("getOpinionsById")//查看意见
     public String getOpinionsById(@RequestParam("opinionId") int opinionId,HttpServletRequest request){

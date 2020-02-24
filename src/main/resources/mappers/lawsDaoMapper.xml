@@ -75,7 +75,12 @@
 
     <select id="getClauseVoBystaId" resultMap="ClauseVO">
         select sta.statute_name,cla.* from clause cla join statute sta on cla.sta_id=sta.statute_id
-        where sta.statute_id=#{staId}
+        <where>
+            <if test="staId!=0">
+                and sta.statute_id=#{staId}
+            </if>
+        </where>
+
     </select>
     <delete id="delClauseById">
         delete from clause where clause_id=#{clauseId}

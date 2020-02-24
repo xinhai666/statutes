@@ -28,26 +28,15 @@
 <div class="page-container">
 	<div class="text-c">
 	</div>
-	<table class="table table-border table-bordered table-bg">
+	<table class="table table-border table-bordered table-bg table-sort">
 		<thead>
-			<tr class="text-c" style="height: 50px">
-				<th >意见反馈内容</th>
-				<th >反馈时间</th>
-				<th >操作</th>
+			<tr class="text-c">
+				<th width="90">意见反馈内容</th>
+				<th width="30">反馈时间</th>
+				<th width="30">操作</th>
 			</tr>
 		</thead>
-		<tbody>
-		<#list opinionsList as o>
-		<tr class="text-c">
-			<td>${o.opinionContent!}</td>
-			<td>${o.opinionCreatetime?date}</td>
-			<td class="td-manage"><a title="查看" href="javascript:;" onclick="opinions_show('查看','getOpinionsById?opinionId=${o.opinionId}','${o.opinionId}','','300')" style="text-decoration:none">查看</a>
-				&nbsp;&nbsp;
-				<a title="删除" href="javascript:;" onclick="opinions_del(this,'${o.opinionId}')" class="ml-5" style="text-decoration:none">删除</a></td>
-			</td>
-		</tr>
-		</#list>
-			
+		<tbody id="opinstb">
 		</tbody>
 	</table>
 </div>
@@ -62,8 +51,41 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript">
-
-
+	$(function () {
+		$.ajax({
+			url:'getAllOpinions',
+			type: 'post',
+			dataType:'json',
+			success:function (data) {
+				for(var i=0;i<data.length;i++){
+					var content=data[i].opinionContent;
+					if(content.length>30){
+						content=content.substring(0,20)+"……";
+					}
+					$("#opinstb").append(
+							"<tr class=\"text-c\">"+
+							"<td style='text-align: left'>"+content+"</td>"+
+							"<td>"+data[i].opinionCreatetime+"</td>"+
+							"<td class=\"td-manage\"><a title=\"查看\" href=\"javascript:;\" onclick=\"opinions_show('查看','getOpinionsById?opinionId="+data[i].opinionId+"','"+data[i].opinionId+"','','360')\" style=\"text-decoration:none\">查看</a>" +
+							"&nbsp;&nbsp;" +
+							"<a title=\"删除\" href=\"javascript:;\" onclick=\"opinions_del(this,'"+data[i].opinionId+"')\" class=\"ml-5\" style=\"text-decoration:none\">删除</a></td>" +
+							"</tr>"
+					)
+				}
+				$('.table-sort').dataTable({
+					"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+					"bStateSave": true,//状态保存
+					"aoColumnDefs": [
+						//{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+						{"orderable":false,"aTargets":[2]}// 制定列不参与排序
+					]
+				});
+			},
+			error:function () {
+				layer.msg('加载数据异常!',{icon:2,time:1000});
+			}
+		});
+	});
 /*查看*/
 function opinions_show(title,url,id,w,h){
 	layer_show(title,url,w,h);

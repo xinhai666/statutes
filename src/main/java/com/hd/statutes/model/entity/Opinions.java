@@ -10,8 +10,8 @@ public class Opinions {
 
   private Integer opinionId;
   private String opinionContent;
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @JSONField(format = "yyyy-MM-dd")
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JSONField(format = "yyyy-MM-dd HH:mm:ss")
   private Date opinionCreatetime;
 
 

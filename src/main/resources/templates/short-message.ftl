@@ -100,7 +100,7 @@ $(function(){
 					layer.msg('保存完成!',{icon:1,time:1000});
 				},
 				error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('保存数据异常!',{icon:1,time:1000});
+					layer.msg('保存数据异常!',{icon:2,time:1000});
 				}
 			});
 			var index = parent.layer.getFrameIndex(window.name);

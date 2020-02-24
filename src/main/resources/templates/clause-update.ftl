@@ -32,6 +32,7 @@
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 法规管理 <span class="c-gray en">&gt;</span> 修改条款 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <article class="page-container">
+	<input type="button" class="btn" onclick="history.go(-1)" value="&nbsp;返 回&nbsp;" /></span>
 	<input type="hidden" id="staId" value="${clause.staId!}">
 	<input type="hidden" id="conId" value="${clause.conId!}">
 	<form class="form form-horizontal" id="form-clause-add">
@@ -98,8 +99,6 @@
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
 				<input class="btn btn-primary radius" type="submit" value="&nbsp;保 存&nbsp;">
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="button" class="btn btn-secondary radius" onclick="history.go(-1)" value="&nbsp;返 回&nbsp;" /></span>
 			</div>
 		</div>
 	</form>

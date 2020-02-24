@@ -28,4 +28,8 @@ public interface UsersDao {
     int updateAdmins(Admins admins);
     //管理员登录
     Admins adminLogin(Admins admins);
+    //用户登录
+    Users userLogin(@Param("userPhone") String userPhone,@Param("password") String password);
+    //用户注册
+    int addUsers(@Param("userName")String userName,@Param("userPhone")String userPhone,@Param("password")String password);
 }

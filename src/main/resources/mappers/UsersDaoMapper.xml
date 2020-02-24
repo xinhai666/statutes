@@ -36,6 +36,14 @@
     <select id="adminLogin" resultMap="admins">
         select * from admins where admin_phone=#{adminPhone} and password=#{password}
     </select>
+    <select id="userLogin" resultMap="Users">
+        select * from users where user_phone=#{userPhone} and password=#{password}
+    </select>
+    <insert id="addUsers" parameterType="com.hd.statutes.model.entity.Users">
+        insert into users(user_name, user_phone, password,user_createtime) VALUES
+        (#{userName},#{userPhone},#{password},now())
+    </insert>
+
     <resultMap id="admins" type="com.hd.statutes.model.entity.Admins">
         <id property="adminId" column="admin_id"></id>
         <result property="adminPhone" column="admin_phone"></result>
@@ -61,6 +69,7 @@
         <id property="userId" column="user_id"></id>
         <result property="userName" column="user_name"></result>
         <result property="userPhone" column="user_phone"></result>
+        <result property="password" column="password"></result>
         <result property="userSex" column="user_sex"></result>
         <result property="userMember" column="user_member"></result>
         <result property="userCreatetime" column="user_createtime"></result>

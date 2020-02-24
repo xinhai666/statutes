@@ -50,7 +50,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<p align="center"><button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<p align="center"><button type="button" id="closemodel" class="btn btn-default" data-dismiss="modal">关闭</button>
 						&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-primary" id="submit">保存</button>
 					</p>
@@ -107,16 +107,16 @@
 			var adminPhone=$("#adminPhone").val().trim();
 			var password=$("#password").val().trim();
 			if(adminName==null||adminName==''){
-				alert("请输入管理员名");
+				layer.alert("请输入管理员名");
 				return;
 			}
 			var pattern = /^1[34578]\d{9}$/;
 			if(!pattern.test(adminPhone)) {
-				alert("请输入正确的手机号");
+				layer.alert("请输入正确的手机号");
 				return;
 			}
 			if(password==null||password==''){
-				alert("请输入密码");
+				layer.alert("请输入密码");
 				return;
 			}
 			var formData = {};
@@ -134,7 +134,7 @@
 					layer.msg('添加完成!',{icon:1,time:1000});
 				},
 				error : function() {
-					layer.msg('操作失败!',{icon:1,time:1000});
+					layer.msg('操作失败!',{icon:2,time:1000});
 				}
 			});
 		})
@@ -158,7 +158,7 @@
 					}
 				},
 				error:function (data) {
-					layer.msg('加载数据失败!',{icon:1,time:1000});
+					layer.msg('加载数据失败!',{icon:2,time:1000});
 				}
 			})
 	}
@@ -188,7 +188,8 @@
 			success: function(data){
 				$("#admtb").empty();
 				getAdmins();
-				layer.msg('保存成功!',{icon:1,time:1000});
+				layer.msg('保存完成!',{icon:1,time:1000});
+				$("#closemodel").click();
 			},
 			error: function(XmlHttpRequest, textStatus, errorThrown){
 				layer.msg('保存出错了!',{icon:2,time:1000});

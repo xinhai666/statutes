@@ -25,11 +25,11 @@ public class UsersController {
         request.setAttribute("usersList",usersList);
         return "users-list";
     }
-    @GetMapping("getAllConsultsByUserId")
-    public String getAllConsultsByUserId(@RequestParam(value = "userId",defaultValue = "0") int userId, HttpServletRequest request){
+    @PostMapping("getAllConsultsByUserId")
+    @ResponseBody
+    public String getAllConsultsByUserId(@RequestParam(value = "userId",defaultValue = "0") int userId){
         List<Consults> consultsList=usersService.getAllConsultsByUserId(userId);
-        request.setAttribute("consultsList",consultsList);
-        return "consults-list";
+        return JSON.toJSONString(consultsList);
     }
     @GetMapping("consultShow")
     public String consultShow(@RequestParam("consultId") int consultId,HttpServletRequest request){

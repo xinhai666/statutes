@@ -65,6 +65,33 @@
 </div>
 </div>
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top: 20vh;">
+	<div class="modal-dialog">
+		<form class="form form-horizontal" id="form-statype-add">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" align="center">此操作会同时删除该法规的所有目录和条款且不可恢复！确认请输入"OK"</h4>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3"></label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input style="width: 60%" class="input-text" id="del_verify">
+						<p></p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<p align="center">
+						<input class="btn btn-primary radius" type="button" id="verify" value="&nbsp;&nbsp;确 认&nbsp;&nbsp;">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" id="closemodel" class="btn btn-primary radius" data-dismiss="modal" value="&nbsp;&nbsp;取 消&nbsp;&nbsp;"></input>
+					</p>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
@@ -107,7 +134,7 @@
 							+ statutesplitName + "</td><td>"
 							+ statuteReveal+"</td><td>"
 							+ "<a title='编辑' href='getStatuteById?statuteId="+data[i].statuteId+"'>编辑</a>"
-							+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a title='删除' href='javascript:;' onclick='statute_del(this," + data[i].statuteId + ")'>删除</a>"
+							+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a data-target='#myModal' data-toggle='modal' title='删除' href='javascript:;' onclick='statute_del(this,"+data[i].statuteId+")'>删除</a>"
 							+ "</td></tr>"
 					)
 				}
@@ -149,30 +176,52 @@
 						}
 					}
 				})
-		})
-	});
+		});
+	 });
 
 	/*-删除*/
-	function statute_del(obj,id){
-		var delVerify = prompt("会同时删除该法规的所有目录和条款且不可恢复！确认删除请输入'OK'","");
-		if(delVerify=='ok'||delVerify=='OK'){
-			layer.confirm('确认要删除吗？',function(index){
+	function statute_del(obj,id) {
+		$("#verify").click(function () {
+			var verify = $("#del_verify").val().trim();
+			if (verify == 'ok' || verify == 'OK') {
 				$.ajax({
 					type: 'POST',
 					url: 'delStatuteById',
-					data:{'statuteId':id},
-					success: function(data){
+					data: {'statuteId': id},
+					success: function (data) {
 						$(obj).parents("tr").remove();
-						layer.msg('已删除!',{icon:1,time:1000});
+						layer.msg('已删除!', {icon: 1, time: 1000});
+						$("#closemodel").click();
 					},
-					error:function(data) {
-						layer.msg('删除失败!',{icon:2,time:1000});
+					error: function (data) {
+						layer.msg('删除失败!', {icon: 2, time: 1000});
 						console.log(data.msg);
 					},
 				});
-			});
-		}
+			} else {
+				layer.msg('未输入"OK",删除操作已取消！', {icon: 2, time: 2000});
+				$("#closemodel").click();
+			}
+		})
 	}
+
+	//  function statute_del(obj,id){
+	// 	layer.confirm('确认要删除吗？',function(index){
+	// 		$.ajax({
+	// 			type: 'POST',
+	// 			url: 'delStatuteById',
+	// 			data:{'statuteId':id},
+	// 			success: function(data){
+	// 				$(obj).parents("tr").remove();
+	// 				layer.msg('已删除!',{icon:1,time:1000});
+	// 			},
+	// 			error:function(data) {
+	// 				layer.msg('删除失败!',{icon:2,time:1000});
+	// 				console.log(data.msg);
+	// 			},
+	// 		});
+	// 	});
+	// }
 </script>
 </body>
 </html>

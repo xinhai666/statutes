@@ -11,6 +11,7 @@ public class Users {
   private Integer userId;
   private String userName;
   private String userPhone;
+  private String password;
   private Integer userSex;
   private Integer userMember;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -44,6 +45,13 @@ public class Users {
     this.userPhone = userPhone;
   }
 
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
   public Integer getUserSex() {
     return userSex;

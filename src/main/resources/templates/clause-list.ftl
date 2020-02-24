@@ -19,7 +19,7 @@
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>法规列表</title>
+<title>条款列表</title>
 </head>
 <body>
 
@@ -27,10 +27,9 @@
 <span class="c-gray en">&gt;</span>
 法规管理
 <span class="c-gray en">&gt;</span>
-法规列表
+条款列表
 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
 </nav>
-
 
 <div class="page-container">
     <div class="text-a">
@@ -73,26 +72,25 @@
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script> 
 <script type="text/javascript">
-    $('.table-sort').dataTable({
-        "aaSorting": [[ 1, "desc" ]],//默认第几个排序
-        "bStateSave": true,//状态保存
-        "aoColumnDefs": [
-            //{"bVisible": false, "aTargets": [ 3 ]}, //控制列的隐藏显示
-            {"orderable":false,"aTargets":[5]}// 制定列不参与排序
-        ]
-    });
-    /*获得所有法规*/
-    $.post('checkStatuteByName',function (data) {
-        if(data!=null){
-            for(var i=0;i<data.length;i++){
-                $("#statuteId").append(
-                    "<option value='"+data[i].statuteId+"'>"+data[i].statuteAlias+" "+data[i].statuteName+"</option>"
-                )
+    $(function () {
+        getClauses();//加载所有条款
+        /*获得所有法规*/
+        $.post('checkStatuteByName',function (data) {
+            if(data!=null){
+                for(var i=0;i<data.length;i++){
+                    $("#statuteId").append(
+                        "<option value='"+data[i].statuteId+"'>"+data[i].statuteAlias+" "+data[i].statuteName+"</option>"
+                    )
+                }
             }
-        }
-    },'json');
-    //根据法规查条款
-    $("#statuteId").change(function () {
+        },'json');
+        //根据法规查条款
+        $("#statuteId").change(function () {
+            getClauses();
+        });
+    })
+    /*查询条款*/
+    function getClauses() {
         $(".table-sort").dataTable().fnDestroy();//还原初始化了datatable
         $("#clausetb tr").slice(0).remove();
         $.post('getClauseVoBystaId',{'staId':$("#statuteId").val()},function (data) {
@@ -119,28 +117,27 @@
                 ]
             });
         },'json');
-    });
+    }
 
-/*删除*/
-function clause_del(obj,id){
-	layer.confirm('确认要删除吗？',function(index){
-		$.ajax({
-			type: 'POST',
-			url: 'delClauseById',
-            data:{'clauseId':id},
-			dataType: 'json',
-			success: function(data){
-				$(obj).parents("tr").remove();
-				layer.msg('已删除!',{icon:1,time:1000});
-			},
-			error:function(data) {
-                layer.msg('删除失败!',{icon:2,time:1000});
-				console.log(data.msg);
-			},
-		});		
-	});
-}
+    /*删除*/
+    function clause_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: 'POST',
+                url: 'delClauseById',
+                data:{'clauseId':id},
+                dataType: 'json',
+                success: function(data){
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!',{icon:1,time:1000});
+                },
+                error:function(data) {
+                    layer.msg('删除失败!',{icon:2,time:1000});
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
 </script>
-
 </body>
 </html>

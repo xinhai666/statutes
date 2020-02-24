@@ -88,7 +88,7 @@
 			<dt><i class="Hui-iconfont">&#xe622;</i> 咨询管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a data-href="getAllConsultsByUserId" data-title="咨询管理" href="javascript:void(0)">咨询列表</a></li>
+					<li><a data-href="consultsList" data-title="咨询管理" href="javascript:void(0)">咨询列表</a></li>
 			</ul>
 		</dd>
 	</dl>
@@ -105,7 +105,7 @@
 					<li><a data-href="emailSmtp" data-title="邮件SMTP设置" href="javascript:void(0)">邮件SMTP设置</a></li>
 					<li><a data-href="shortMessage" data-title="短信设置" href="javascript:void(0)">短信设置</a></li>
 					<li><a data-href="adminManage" data-title="管理员管理" href="javascript:void(0)">管理员管理</a></li>
-					<li><a data-href="getAllOpinions" data-title="意见反馈列表" href="javascript:void(0)">意见反馈列表</a></li>
+					<li><a data-href="opinionInfo" data-title="意见反馈列表" href="javascript:void(0)">意见反馈列表</a></li>
 			</ul>
 		</dd>
 	</dl>
