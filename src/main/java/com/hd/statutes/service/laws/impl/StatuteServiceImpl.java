@@ -6,6 +6,7 @@ import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.model.vo.StatuteVO;
 import com.hd.statutes.service.laws.StatuteService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -95,6 +96,7 @@ public class StatuteServiceImpl implements StatuteService {
     }
 
     @Override
+    @Transactional
     public int delContents(int contentsId) {
         return statuteDao.delContents(contentsId);
     }

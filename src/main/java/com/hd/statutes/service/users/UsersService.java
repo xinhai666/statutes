@@ -27,6 +27,12 @@ public interface UsersService {
      * @return
      */
     Consults getConsultsById(int consultsId) ;
+
+    /**
+     * 删除一条咨询
+     * @param consultId
+     * @return
+     */
     int delConsultById(int consultId);
     /**
      * 添加管理员

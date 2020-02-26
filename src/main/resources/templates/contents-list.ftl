@@ -116,6 +116,8 @@
 	}
 
 	function subdirectory(obj,id){
+		//obj.onclick=null;
+		obj.removeAttribute("onclick");
 		$(".table-sort").dataTable().fnDestroy();//还原初始化了datatable
 		var staId=$("#statuteId").val();
 		$("tr[conid="+id+"]").remove();

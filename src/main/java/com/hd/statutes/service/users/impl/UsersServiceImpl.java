@@ -8,6 +8,7 @@ import com.hd.statutes.service.users.UsersService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -49,7 +50,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public int delAdminById(int adminId) {
-        return usersDao.delAdminById(adminId);
+         return usersDao.delAdminById(adminId);
     }
 
     @Override

@@ -1,36 +1,31 @@
 package com.hd.statutes.controller.management;
 
 import com.alibaba.fastjson.JSON;
+import com.hd.statutes.controller.SystemControllerLog;
 import com.hd.statutes.model.entity.*;
 import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.model.vo.StatuteVO;
 import com.hd.statutes.service.laws.StatuteService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Controller
 public class StatuteController {
     @Resource
     private StatuteService statuteService;
-
-    @GetMapping("getAllStatype") //
+    @SystemControllerLog(description = "查询所有法规类型")
+    @GetMapping("getAllStatype") //查询所有法规类型
     @ResponseBody
     public String getAllStatype(){
         List<Statutestype> list=statuteService.getAllStatype();
         return JSON.toJSONString(list);
     }
+    @SystemControllerLog(description = "添加法规类型")
     @PostMapping("addSatatueType")
     @ResponseBody
     public String addSatatueType(@RequestParam("statutestypeName")String statutestypeName){
@@ -41,6 +36,7 @@ public class StatuteController {
             return "false";
         }
     }
+    @SystemControllerLog(description = "删除法规类型")
     @RequestMapping("delStatueTypeById")
     @ResponseBody
     public String delStatueTypeById(@RequestParam("statutestypeId")int statutestypeId){
@@ -51,18 +47,20 @@ public class StatuteController {
             return "false";
         }
     }
+    @SystemControllerLog(description = "根据法规类型id查询所有该法规主分支")
     @GetMapping("getAllStaSplit")
     @ResponseBody
     public String getAllStaSplit(@RequestParam("statutestypeId") int statutestypeId){
         List<Statutesplit> list=statuteService.getAllStaSplit(statutestypeId);
         return JSON.toJSONString(list);
     }
+    @SystemControllerLog(description = "添加法规分支页")
     @RequestMapping("stasplitAdd")//添加法规分支页
     public String stasplitAdd(@RequestParam("statutestypeId") int statutestypeId,Model model){
         model.addAttribute("statutestypeId",statutestypeId);
         return "stasplit-add";
     }
-
+    @SystemControllerLog(description = "查询所有法规")
     @GetMapping(value = "getAllStatutes")
     @ResponseBody
     public String getAllStatutes(@RequestParam(value = "statutestypeId",defaultValue = "0") int statutestypeId,
@@ -71,6 +69,7 @@ public class StatuteController {
         return JSON.toJSONString(list);
 
     }
+    @SystemControllerLog(description = "查询一个法规类型")
     @GetMapping("stasplitlist")
     public String stasplitlist(@RequestParam("statutestypeId")int statutestypeId, Model model){
         Statutestype statutestype=statuteService.getStatutesTypeById(statutestypeId);
@@ -78,6 +77,7 @@ public class StatuteController {
         model.addAttribute("statutestype",statutestype);
         return "statusplit-list";
     }
+    @SystemControllerLog(description = "添加主分支")
     @PostMapping("addStaSplit")
     @ResponseBody
     public String addStaSplit(Statutesplit statutesplit){
@@ -89,6 +89,7 @@ public class StatuteController {
             return "false";
         }
     }
+    @SystemControllerLog(description = "删除分支")
     @PostMapping("delStatueSplitById")
     @ResponseBody
     public String delStatueSplitById(@RequestParam("statutesplitId") int statutesplitId){
@@ -101,6 +102,7 @@ public class StatuteController {
     }
 
     //添加法规
+    @SystemControllerLog(description = "添加法规")
     @PostMapping(value = "addStatute",produces = "text/html;charset=utf-8")
     @ResponseBody
     public String addStatute(Statute sta) {
@@ -119,6 +121,7 @@ public class StatuteController {
      * @param staId
      * @return
      */
+    @SystemControllerLog(description = "根据法规查询所有目录")
    @RequestMapping("getAllContentsByStatuteId")
    @ResponseBody
    public String getAllContentsByStatuteId(@RequestParam(value = "contentsLevel",defaultValue = "0")int contentsLevel,
@@ -129,6 +132,7 @@ public class StatuteController {
        //System.out.println(listStr);
        return listStr;
     }
+    @SystemControllerLog(description = "添加目录")
     @PostMapping("addContents")
     @ResponseBody
     public String addContents(Contents contents){
@@ -151,6 +155,7 @@ public class StatuteController {
      * @param clause
      * @return
      */
+    @SystemControllerLog(description = "新增条款")
     @PostMapping("addClause")
     @ResponseBody
     public String addClause(Clause clause){
@@ -167,6 +172,7 @@ public class StatuteController {
      * @param staId
      * @return
      */
+    @SystemControllerLog(description = "根据法规查询所有条款")
     @PostMapping("getClauseVoBystaId")
     @ResponseBody
     public String getClauseVoBystaId(@RequestParam(value = "staId",defaultValue = "0") int staId){
@@ -179,6 +185,7 @@ public class StatuteController {
      * @param clauseId
      * @return
      */
+    @SystemControllerLog(description = "删除条款")
     @PostMapping("delClauseById")
     @ResponseBody
     public String delClauseById(@RequestParam("clauseId")int clauseId){
@@ -194,6 +201,7 @@ public class StatuteController {
      * @param clauseId
      * @return
      */
+    @SystemControllerLog(description = "查询一个条款")
     @GetMapping("checkClauseById")
     public String checkClauseById(@RequestParam("clauseId") int clauseId, HttpServletRequest request){
         ClauseVO clauseVO=statuteService.checkClauseById(clauseId);
@@ -207,6 +215,7 @@ public class StatuteController {
      * @param clause
      * @return
      */
+    @SystemControllerLog(description = "修改条款")
     @PostMapping("updateClause")
     @ResponseBody
    public void updateClause(Clause clause){
@@ -217,6 +226,7 @@ public class StatuteController {
      * 根据目录id删除目录
      * @param contentsId
      */
+    @SystemControllerLog(description = "根据目录id删除目录")
     @PostMapping("delContents")
     @ResponseBody
     public String delContents(@RequestParam("contentsId") int contentsId) {
@@ -230,6 +240,7 @@ public class StatuteController {
     /**
      * 修改目录页面
      */
+    @SystemControllerLog(description = "修改目录页面")
     @GetMapping("updateContentsPage")
     public String updateContentsPage(@RequestParam("contentsId") int contentsId,HttpServletRequest request){
         Contents contents=statuteService.getContentsById(contentsId);
@@ -241,6 +252,7 @@ public class StatuteController {
      * 修改目录
      * @param contents
      */
+    @SystemControllerLog(description = "修改目录")
     @PostMapping("updateContents")
     @ResponseBody
     public void updateContents(Contents contents){
@@ -257,6 +269,7 @@ public class StatuteController {
      * @param statuteId
      * @return
      */
+    @SystemControllerLog(description = "查询一条法规")
     @GetMapping("getStatuteById")
     public String getStatuteById(@RequestParam("statuteId") int statuteId,HttpServletRequest request){
         Statute statute=statuteService.getStatuteById(statuteId);
@@ -269,6 +282,8 @@ public class StatuteController {
      * @param statute
      * @return
      */
+    @SystemControllerLog(description = "修改法规")
+
     @PostMapping("updateStatute")
     @ResponseBody
     public String updateStatute(Statute statute){
@@ -279,7 +294,8 @@ public class StatuteController {
             return "false";
         }
     }
-    @PostMapping("delStatuteById")
+    @SystemControllerLog(description = "删除法规")
+    @PostMapping("delStatuteById")//删除法规
     @ResponseBody
     public String delStatuteById(int statuteId){
         int num=statuteService.delStatuteById(statuteId);

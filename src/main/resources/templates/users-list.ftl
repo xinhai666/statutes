@@ -25,6 +25,45 @@
 <body>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 用户管理 <span class="c-gray en">&gt;</span> 用户列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
+
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="margin-top: 20vh;">
+		<div class="modal-dialog">
+			<form action="sendAlipay" method="post">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">会员</h4>
+					</div>
+					<div class="modal-body">
+							<input type="hidden" id="WIDtotal_amount" name="WIDtotal_amount" value="88">
+							<input type="hidden" name="WIDsubject" value="航多知识会员" />
+							<input type="hidden" name="WIDbody" value="航多知识会员" />
+							<input type="hidden" name="userId" id="userId" value="0">
+						<p align="center"><span style="font-size: 16px">费用：</span><span style="color: #f37b1d;font-size: 20px;"><b id="money">88</b><b> 元</b></span></p>
+						<br>
+						<p align="center">
+						<span style="font-size: 16px">时长：</span>
+						<select  style="width: 100px;height: 28px" name="month" id="month">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="12">12</option>
+						</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input style="width: 90px;background-color: #f37b1d" type="submit" class="btn btn-primary" id="submit" value="去支付">
+						</p>
+					</div>
+					<div class="modal-footer">
+						<p align="center"><input type="hidden" id="closemodel" class="btn btn-default" data-dismiss="modal">
+						</p>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-hover table-bg table-sort">
 			<thead>
@@ -34,6 +73,7 @@
 				<th width="30">性别</th>
 				<th width="80">会员类型</th>
 				<th width="50">注册日期</th>
+				<th width="50">操作</th>
 			</tr>
 			</thead>
 			<tbody id="ustab">
@@ -57,6 +97,13 @@
 						</#if>
 					</td>
 					<td>${(u.userCreatetime)?date}</td>
+						<td>
+							<#if u.userMember==0>
+							<label><a data-target='#myModal' data-toggle='modal' href="javascript:;" onclick="upvip(${u.userId})">开通</a></label>
+							<#else>
+							<label><a data-target='#myModal' data-toggle='modal' href="javascript:;" onclick="upvip(${u.userId})">续费</a></label>
+							</#if>
+						</td>
 					</tr>
 				</#list>
 			</tbody>
@@ -85,23 +132,17 @@
 			]
 		});
 
-	/*会员状态修改*/
-
-		$("").change(function () {
-			$.ajax({
-				type: 'POST',
-				url: '',
-				dataType: 'json',
-				success: function(data){
-					$(obj).parents("tr").remove();
-					layer.msg('已删除!',{icon:1,time:1000});
-				},
-				error:function(data) {
-					console.log(data.msg);
-				},
-			});
-		})
+		/*会员*/
+		$("#month").change(function () {
+			var money=$("#month").val()*88;
+			$("#money").text(money);
+			$("#WIDtotal_amount").val(money);
+		});
 	});
+
+	function upvip(id) {
+		$("#userId").val(id);
+	}
 </script>
 </body>
 </html>

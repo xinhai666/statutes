@@ -141,21 +141,57 @@
 			}
 		},'json');
 		/*根据法规加载目录*/
+		// $("#statuteId").change(function () {
+		// 	var staId=$("#statuteId").val();
+		// 	$("#contentsId option").slice(1).remove();
+		// 	$.getJSON('getAllContentsByStatuteId',{'contentsLevel':1,'staId':staId},function (data) {
+		// 		if (data != null) {
+		// 			for (var i = 0; i < data.length; i++) {
+		// 				$("#contentsId").append(
+		// 						"<option value='"+data[i].contentsId+"' conid='"+data[i].contentsId+"' id='"+data[i].contentsId+"'>"+data[i].contentsName+"</option>"
+		// 				)
+		// 			}
+		// 		} else {
+		// 			return
+		// 		}
+		// 		$('#contentsId option').each(function (i) {//遍历tr
+		// 			var conId = $(this).attr('conid');
+		// 			$.getJSON('getAllContentsByStatuteId', {
+		// 				'contentsLevel': 2,
+		// 				'conId': conId,
+		// 				'staId': staId
+		// 			}, function (data) {
+		// 				if (data != null) {
+		// 					for (var i = data.length - 1; i >= 0; i--) {
+		// 						$("#" + conId).after(
+		// 								"<option value='"+data[i].contentsId+"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + data[i].contentsName + "</option>"
+		// 						)
+		// 					}
+		// 				}
+		// 			})
+		// 		});
+		// 	})
+		// });
+
+		/*根据法规加载目录*/
 		$("#statuteId").change(function () {
+			var statutestypeId=$("#statutestypeId").val();
+			var statutesplitId=$("#statutesplitId").val();
 			var staId=$("#statuteId").val();
 			$("#contentsId option").slice(1).remove();
+			$.ajaxSettings.async = false;
 			$.getJSON('getAllContentsByStatuteId',{'contentsLevel':1,'staId':staId},function (data) {
 				if (data != null) {
 					for (var i = 0; i < data.length; i++) {
 						$("#contentsId").append(
-								"<option value='"+data[i].contentsId+"' conid='"+data[i].contentsId+"' id='"+data[i].contentsId+"'>"+data[i].contentsName+"</option>"
+								"<option value='"+data[i].contentsId+"' contentsLevel='"+data[i].contentsLevel+"' conid="+data[i].conId+" id='"+data[i].contentsId+"'>"+data[i].contentsName+"</option>"
 						)
 					}
-				} else {
-					return
 				}
-				$('#contentsId option').each(function (i) {//遍历tr
-					var conId = $(this).attr('conid');
+				//遍历tr
+				$('#contentsId option').each(function (i) {
+					var conId = $(this).val();
+					$.ajaxSettings.async = false;
 					$.getJSON('getAllContentsByStatuteId', {
 						'contentsLevel': 2,
 						'conId': conId,
@@ -164,7 +200,26 @@
 						if (data != null) {
 							for (var i = data.length - 1; i >= 0; i--) {
 								$("#" + conId).after(
-										"<option value='"+data[i].contentsId+"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + data[i].contentsName + "</option>"
+										"<option contentsLevel='"+data[i].contentsLevel+"' conid="+data[i].conId+" value='"+data[i].contentsId+"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + data[i].contentsName + "</option>"
+								)
+							}
+						}
+					})
+				});
+				$("[contentsLevel='2']").each(function () {
+					var conId2 = $(this).val();
+					var doct=$(this);
+					$.ajaxSettings.async = false;
+					$.getJSON('getAllContentsByStatuteId', {
+						'contentsLevel': 3,
+						'conId': conId2,
+						'staId': staId
+					}, function (data) {
+						if (data != null) {
+							for (var i = data.length - 1; i >= 0; i--) {
+								console.log(conId2)
+								doct.after(
+										"<option contentsLevel='"+data[i].contentsLevel+"' value='"+data[i].contentsId+"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + data[i].contentsName + "</option>"
 								)
 							}
 						}

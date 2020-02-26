@@ -27,7 +27,7 @@ public class QNController {
     public String init(){
         return "qiniuFile";
     }
-
+    @SystemControllerLog(description = "上传了图片")
     @PostMapping("/shangchuan")
     @ResponseBody
     public String shangchuan(@RequestParam("logofile") MultipartFile logofile, Model model)throws Exception{
@@ -38,6 +38,7 @@ public class QNController {
         System.out.println(url);
         return url;
     }
+    @SystemControllerLog(description = "上传了PDF文件")
     @PostMapping("/pdfUpload")
     @ResponseBody
     public String pdfUpload(@RequestParam("pdffile") MultipartFile pdffile, Model model)throws Exception{

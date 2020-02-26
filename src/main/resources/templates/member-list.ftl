@@ -134,7 +134,7 @@
 							+ statutesplitName + "</td><td>"
 							+ statuteReveal+"</td><td>"
 							+ "<a title='编辑' href='getStatuteById?statuteId="+data[i].statuteId+"'>编辑</a>"
-							+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a data-target='#myModal' data-toggle='modal' title='删除' href='javascript:;' onclick='statute_del(this,"+data[i].statuteId+")'>删除</a>"
+							+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a data-target='#myModal' data-toggle='modal' href='javascript:;'>删除</a>"
 							+ "</td></tr>"
 					)
 				}
@@ -180,30 +180,28 @@
 	 });
 
 	/*-删除*/
-	function statute_del(obj,id) {
-		$("#verify").click(function () {
-			var verify = $("#del_verify").val().trim();
-			if (verify == 'ok' || verify == 'OK') {
-				$.ajax({
-					type: 'POST',
-					url: 'delStatuteById',
-					data: {'statuteId': id},
-					success: function (data) {
-						$(obj).parents("tr").remove();
-						layer.msg('已删除!', {icon: 1, time: 1000});
-						$("#closemodel").click();
-					},
-					error: function (data) {
-						layer.msg('删除失败!', {icon: 2, time: 1000});
-						console.log(data.msg);
-					},
-				});
-			} else {
-				layer.msg('未输入"OK",删除操作已取消！', {icon: 2, time: 2000});
-				$("#closemodel").click();
-			}
-		})
-	}
+	$("#verify").click(function () {
+		var verify = $("#del_verify").val().trim();
+		if (verify == 'ok' || verify == 'OK') {
+			$.ajax({
+				type: 'POST',
+				url: 'delStatuteById',
+				data: {'statuteId': id},
+				success: function (data) {
+					$(obj).parents("tr").remove();
+					layer.msg('已删除!', {icon: 1, time: 1000});
+					$("#closemodel").click();
+				},
+				error: function (data) {
+					layer.msg('删除失败!', {icon: 2, time: 1000});
+					console.log(data.msg);
+				},
+			});
+		} else {
+			layer.msg('未输入"OK",删除操作已取消！', {icon: 2, time: 2000});
+			$("#closemodel").click();
+		}
+	})
 
 	//  function statute_del(obj,id){
 	// 	layer.confirm('确认要删除吗？',function(index){
