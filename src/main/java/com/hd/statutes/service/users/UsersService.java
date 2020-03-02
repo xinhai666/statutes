@@ -3,6 +3,7 @@ package com.hd.statutes.service.users;
 import com.hd.statutes.model.entity.Admins;
 import com.hd.statutes.model.entity.Consults;
 import com.hd.statutes.model.entity.Users;
+import com.hd.statutes.model.vo.ClauseVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -84,4 +85,5 @@ public interface UsersService {
      * @return
      */
     int addUsers(String userName,String userPhone,String password);
+
 }

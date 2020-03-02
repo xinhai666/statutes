@@ -113,6 +113,32 @@
     <delete id="delStatuteById">
         delete from statute where statute_id=#{statuteId}
     </delete>
+    <!--小程序端添加收藏-->
+    <insert id="wxAddCollects">
+        insert into collects values (null,#{userId},#{claId})
+    </insert>
+    <!--小程序段查询用户收藏的所有条款-->
+    <select id="checkClauseVOByUserId" resultMap="ClauseVO">
+         select sta.statute_name,cla.* from clause cla
+         join statute sta on cla.sta_id=sta.statute_id
+         join collects col on col.cla_id=cla.clause_id
+         where col.user_id=#{userId}
+         <if test="claId!=0">
+             and col.cla_id=#{claId}
+         </if>
+    </select>
+    <!--小程序端提交意见反馈-->
+    <insert id="addOpinions">
+        insert into opinions values(null,#{opinionContent},now())
+    </insert>
+    <!--模糊查找条款-->
+    <select id="wxLoadAllClause" resultMap="ClauseVO">
+        select sta.statute_name,cla.* from clause cla join statute sta on cla.sta_id=sta.statute_id
+        where cla.clause_number like concat('%',#{keyword},'%')
+        or cla.clause_antistop like concat('%',#{keyword},'%')
+        or cla.clause_title like concat('%',#{keyword},'%')
+    </select>
+
     <resultMap id="ClauseVO" type="com.hd.statutes.model.vo.ClauseVO">
         <id property="clauseId" column="clause_id"></id>
         <result property="staId" column="sta_id"></result>

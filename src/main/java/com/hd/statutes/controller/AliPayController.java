@@ -1,5 +1,6 @@
 package com.hd.statutes.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -41,19 +42,19 @@ public class AliPayController {
     String out_trade_no = OrderCodeUtil.GetCode();
     System.out.println("订单号:"+out_trade_no);
     //付款金额，必填
-    String total_amount = new String(request.getParameter("WIDtotal_amount").getBytes("UTF-8"),"UTF-8");
+    String total_amount =request.getParameter("WIDtotal_amount");
     //订单名称，必填
-    String subject = new String(request.getParameter("WIDsubject").getBytes("UTF-8"),"UTF-8");
+    String subject = request.getParameter("WIDsubject");
     //商品描述，可空
-    String body = new String(request.getParameter("WIDbody").getBytes("UTF-8"),"UTF-8");
-    //操作的用户Id
-    String userId = new String(request.getParameter("userId").getBytes("UTF-8"),"UTF-8");
+    String body = request.getParameter("WIDbody");
 
     alipayRequest.setBizContent("{\"out_trade_no\":\""+ out_trade_no +"\","+
          "\"total_amount\":\""+ total_amount +"\","+
          "\"subject\":\""+ subject +"\","+
-         "\"userId\":\""+ userId +"\","+
          "\"body\":\""+ body +"\","+
+        "\"passback_params\":\"merchantBizType%3d3C%26merchantBizNo%3d2016010101111\"," +
+        "\"extend_params\":{" +
+        "\"sys_service_provider_id\":\"2088511846\"" +"},"+
          "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
 
     //请求
@@ -66,32 +67,26 @@ public class AliPayController {
     }
 
     @RequestMapping("/callBack")
-    public String callBack(HttpServletRequest request)throws Exception{
-//        String userId=new String(request.getParameter("userId").getBytes("UTF-8"),"UTF-8");
-//        System.out.println(userId);
-//        Map<String,String> params = new HashMap<String,String>();
-//        Map<String,String[]> requestParams = request.getParameterMap();
-//        for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
-//            String name = (String) iter.next();
-//            System.out.println(name);
-//            String[] values = (String[]) requestParams.get(name);
-//            String valueStr = "";
-//            for (int i = 0; i < values.length; i++) {
-//                valueStr = (i == values.length - 1) ? valueStr + values[i]
-//                        : valueStr + values[i] + ",";
-//            }
-//            System.out.println(valueStr);
-//            乱码解决，这段代码在出现乱码时使用
+    public String callBack(HttpServletRequest request)throws Exception {
+        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String[]> requestParams = request.getParameterMap();
+        for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            // 乱码解决，这段代码在出现乱码时使用
 //            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
-//            params.put(name, valueStr);
-//        }
-
-//        boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type); //调用SDK验证签名
-//        if (signVerified){
-//            return "success";
-//        }else {
-//            return "failed";
-//        }
-        return "goindex";
+            params.put(name, valueStr);
+        }
+        boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key, AlipayConfig.charset, AlipayConfig.sign_type); //调用SDK验证签名
+        if(signVerified) {//验证成功
+            return "goindex";
+        }else {//验证失败
+            return "404";
+        }
     }
 }

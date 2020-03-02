@@ -5,6 +5,7 @@ import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.model.vo.StatuteVO;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface StatuteService {
@@ -168,4 +169,33 @@ public interface StatuteService {
      * @return
      */
     int delStatuteById(int statuteId);
+
+    /**
+     * 用户收藏条款
+     * @param userId
+     * @param claId
+     * @return
+     */
+    int wxAddCollects(int userId,int claId);
+
+    /**
+     * 查询用户收藏的所有条款
+     * @param userId
+     * @return
+     */
+    List<ClauseVO> checkClauseVOByUserId(int userId,int claId);
+
+    /**
+     * 提交意见反馈
+     * @param opinionContent
+     * @return
+     */
+    int addOpinions(String opinionContent);
+
+    /**
+     * 模糊查询法规
+     * @param keyword
+     * @return
+     */
+    List<ClauseVO> wxLoadAllClause(String keyword);
 }

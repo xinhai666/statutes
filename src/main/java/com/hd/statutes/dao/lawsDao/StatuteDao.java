@@ -6,6 +6,7 @@ import com.hd.statutes.model.vo.StatuteVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -57,4 +58,12 @@ public interface StatuteDao {
     int updateContents(Contents contents);
     //删除法规
     int delStatuteById(@Param("statuteId") int statuteId);
+    //收藏条款
+    int wxAddCollects(@Param("userId") int userId, @Param(("claId")) int claId);
+    //查询用户收藏的所有条款
+    List<ClauseVO> checkClauseVOByUserId(@Param("userId")int userId,@Param("claId")int claId);
+    //提交意见反馈
+    int addOpinions(@Param("opinionContent") String opinionContent);
+    //模糊查找条款
+    List<ClauseVO> wxLoadAllClause(@Param(("keyword")) String keyword);
 }

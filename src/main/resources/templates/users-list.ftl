@@ -35,14 +35,14 @@
 						<h4 class="modal-title">会员</h4>
 					</div>
 					<div class="modal-body">
-							<input type="hidden" id="WIDtotal_amount" name="WIDtotal_amount" value="88">
-							<input type="hidden" name="WIDsubject" value="航多知识会员" />
-							<input type="hidden" name="WIDbody" value="航多知识会员" />
-							<input type="hidden" name="userId" id="userId" value="0">
+							<input type="hidden" id="WIDtotal_amount" name="WIDtotal_amount" value="88.00">
+							<input type="hidden" name="WIDsubject" value="航多会员" />
+							<input type="hidden" name="WIDbody" value="航多知识中心会员" />
+							<input type="hidden" name="userId" id="航多会员" value="0">
 						<p align="center"><span style="font-size: 16px">费用：</span><span style="color: #f37b1d;font-size: 20px;"><b id="money">88</b><b> 元</b></span></p>
 						<br>
 						<p align="center">
-						<span style="font-size: 16px">时长：</span>
+						<span style="font-size: 16px">时长(月)：</span>
 						<select  style="width: 100px;height: 28px" name="month" id="month">
 							<option value="1">1</option>
 							<option value="2">2</option>

@@ -1,9 +1,6 @@
 package com.hd.statutes.dao.othersDao;
 
-import com.hd.statutes.model.entity.Companyemail;
-import com.hd.statutes.model.entity.Opinions;
-import com.hd.statutes.model.entity.Shortmessage;
-import com.hd.statutes.model.entity.Sites;
+import com.hd.statutes.model.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

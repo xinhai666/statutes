@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 @Service
 public class StatuteServiceImpl implements StatuteService {
@@ -96,7 +97,6 @@ public class StatuteServiceImpl implements StatuteService {
     }
 
     @Override
-    @Transactional
     public int delContents(int contentsId) {
         return statuteDao.delContents(contentsId);
     }
@@ -119,6 +119,26 @@ public class StatuteServiceImpl implements StatuteService {
     @Override
     public int delStatuteById(int statuteId) {
         return statuteDao.delStatuteById(statuteId);
+    }
+
+    @Override
+    public int wxAddCollects(int userId, int claId) {
+        return statuteDao.wxAddCollects(userId,claId);
+    }
+
+    @Override
+    public List<ClauseVO> checkClauseVOByUserId(int userId, int claId) {
+        return statuteDao.checkClauseVOByUserId(userId,claId);
+    }
+
+    @Override
+    public List<ClauseVO> wxLoadAllClause(String keyword) {
+        return statuteDao.wxLoadAllClause(keyword);
+    }
+
+    @Override
+    public int addOpinions(String opinionContent) {
+        return statuteDao.addOpinions(opinionContent);
     }
 
     @Override

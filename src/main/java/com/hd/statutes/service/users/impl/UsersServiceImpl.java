@@ -4,6 +4,7 @@ import com.hd.statutes.dao.usersDao.UsersDao;
 import com.hd.statutes.model.entity.Admins;
 import com.hd.statutes.model.entity.Consults;
 import com.hd.statutes.model.entity.Users;
+import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.service.users.UsersService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
