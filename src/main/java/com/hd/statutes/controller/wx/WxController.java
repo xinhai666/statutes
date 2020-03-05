@@ -6,6 +6,8 @@ import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.model.vo.StatuteVO;
 import com.hd.statutes.service.laws.StatuteService;
 import com.hd.statutes.service.users.UsersService;
+import com.hd.statutes.utils.MD5;
+import com.hd.statutes.utils.RedisUtils;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -14,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 public class WxController {
@@ -23,6 +27,8 @@ public class WxController {
     private StatuteService statuteService;
     @Autowired
     private UsersService usersService;
+    @Resource
+    private RedisUtils redisUtils;
 
     /**
      * 加载所有法规
@@ -66,7 +72,10 @@ public class WxController {
             if(list.size()>0){
                r.setResult(list);
             }else {
-                r.setResult("[{\"statuteName\":\"没有找到相关内容\"}]");
+                Statute statute=new Statute();
+                statute.setStatuteName("没有找到您需求的数据");
+                list.add(statute);
+                r.setResult(list);
             }
         } catch (Exception e) {
             r.setStatus("error");
@@ -148,7 +157,15 @@ public class WxController {
             Users user=usersService.userLogin(userPhone,password);
             r.setStatus("ok");
             if(user!=null){
-                r.setResult(user);
+                Map<String,Object> map=new HashMap<>();
+                //r.setResult(user);
+                //登录成功生成token
+                String token = this.createToken(user);
+                map.put("token",token);
+                map.put("user",user);
+                r.setResult(map);
+                //保存到redis
+                this.saveToken(token, user);
             }else {
                 r.setResult("");
             }
@@ -157,6 +174,29 @@ public class WxController {
             e.printStackTrace();
         }
         return ResponseEntity.ok(r);
+    }
+    //生成token字符串
+    private String createToken(Users user) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("us"+user.getUserId()+"-token-");
+        String info = MD5.getMD5(user.getUserId().toString(), 32);
+        builder.append(info + "-");
+        builder.append(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+        builder.append(UUID.randomUUID().toString().substring(0, 6));
+        return builder.toString();
+    }
+    //保存token到redis服务器
+    private void saveToken(String token, Users user) {
+
+        String tokenKey = ("user" + user.getUserId());
+        String tokenValue = null;
+        //确保登录信息唯一
+        if ((tokenValue = (String) redisUtils.get(tokenKey)) != null) {
+            redisUtils.delete(tokenKey);
+            redisUtils.delete(tokenValue);
+        }
+        redisUtils.setReids(tokenKey, token, 30000);
+        redisUtils.setReids(token, JSON.toJSONString(user), 30000);
     }
 
     /**

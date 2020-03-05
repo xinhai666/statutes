@@ -1,7 +1,9 @@
 package com.hd.statutes.utils;
 
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class AlipayConfig {
-	
 	  // 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
 		public static String app_id = "2016101600702725";
 		

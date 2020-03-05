@@ -63,7 +63,7 @@
 			<dt><i class="Hui-iconfont">&#xe616;</i>法规管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a data-href="statypelist" data-title="法规类型管理" href="javascript:;">法规类型管理</a></li>
+					<li><a data-href="statypelist" data-title="法规层级管理" href="javascript:;">法规层级管理</a></li>
 					<li><a data-href="gostatuteTable" data-title="法规列表" href="javascript:;">法规列表</a></li>
 					<li><a data-href="articleadd" data-title="新增法规" href="javascript:;">新增法规</a></li>
 					<li><a data-href="contentsPage" data-title="法规目录管理" href="javascript:;">法规目录管理</a></li>
