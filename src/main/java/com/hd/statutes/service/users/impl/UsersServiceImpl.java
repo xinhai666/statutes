@@ -7,6 +7,8 @@ import com.hd.statutes.model.entity.Users;
 import com.hd.statutes.model.vo.ClauseVO;
 import com.hd.statutes.service.users.UsersService;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,11 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public int addAdmin(Admins admins) {
+        //密码加密：md5算法，id编号当盐，迭代1200次
+        String salt="pass"; //盐
+        Md5Hash md5Hash =new Md5Hash(admins.getPassword(),salt,1200);
+        //秘文采用base64格式化后存入对象
+        admins.setPassword(md5Hash.toBase64());
         return usersDao.addAdmin(admins);
     }
 
@@ -72,6 +79,11 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public int addUsers(String userName, String userPhone, String password) {
         return usersDao.addUsers(userName,userPhone,password);
+    }
+
+    @Override
+    public Admins findByPhone(String adminPhone) {
+        return usersDao.findByPhone(adminPhone);
     }
 
 }

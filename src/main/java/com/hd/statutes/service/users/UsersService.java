@@ -86,4 +86,11 @@ public interface UsersService {
      */
     int addUsers(String userName,String userPhone,String password);
 
+    /**
+     * 根据登录手机号查询管理员
+     * @param adminPhone
+     * @return
+     */
+    Admins findByPhone(String adminPhone);
+
 }

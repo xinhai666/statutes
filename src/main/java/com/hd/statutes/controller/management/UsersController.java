@@ -7,6 +7,12 @@ import com.hd.statutes.model.entity.Consults;
 import com.hd.statutes.model.entity.Users;
 import com.hd.statutes.service.users.UsersService;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -45,7 +51,7 @@ public class UsersController {
         return "consult-show";
     }
     @SystemControllerLog(description = "删除一条咨询")
-    @PostMapping("delConsultById")
+    @RequestMapping("/delConsultById")
     @ResponseBody
     public String delConsultById(@RequestParam("consultId") int consultId){
         int num=usersService.delConsultById(consultId);
@@ -56,10 +62,10 @@ public class UsersController {
         }
     }
     @SystemControllerLog(description = "添加管理员")
-    @PostMapping("addAdmin")
+    @RequestMapping("addAdmin")
     @ResponseBody
-    public String addAdmin(Admins admins){
-        int num=usersService.addAdmin(admins);
+    public String addAdmin(@RequestBody Admins admin){
+        int num=usersService.addAdmin(admin);
         if(num>0){
             return "true";
         }else {
@@ -75,36 +81,88 @@ public class UsersController {
     }
     //删除管理员
     @SystemControllerLog(description = "删除一个管理员")
-    @PostMapping("delAdminById")
+    @RequestMapping("/delAdminById")
     @ResponseBody
     public String delAdminById(@RequestParam("adminId") int adminId){
-        return usersService.delAdminById(adminId)+"";
-    }
-    //修改管理员
-    @SystemControllerLog(description = "修改管理员")
-    @PostMapping("updateAdmins")
-    @ResponseBody
-    public String updateAdmins(Admins admins){
-        int num=usersService.updateAdmins(admins);
+        int num=usersService.delAdminById(adminId);
         if(num>0){
             return "true";
         }else {
             return "false";
         }
     }
-    //管理员登录
-    @SystemControllerLog(description = "管理员后台登录")
-    @PostMapping("adminLogin")
-    public String adminLogin(Admins admins, HttpSession session, Model model){
-        Admins adm=usersService.adminLogin(admins);
-        if(adm!=null){
-            session.setAttribute("admins",adm);
-            return "index";
+    //修改管理员
+    @SystemControllerLog(description = "修改管理员")
+    @PostMapping("updateAdmins")
+    @ResponseBody
+    public String updateAdmins(@RequestBody Admins admin){
+        int num=usersService.updateAdmins(admin);
+        if(num>0){
+            return "true";
         }else {
-            model.addAttribute("fail","账号或密码错误，请重试");
-            return "login";
+            return "false";
         }
     }
+
+    /**
+     * 管理员登录 shiro
+     * @param admins
+     * @param request
+     * @return
+     */
+    @PostMapping("/adminLogin")
+    public String adminLogin(Admins admins, HttpServletRequest request){
+        //获取Subject
+        Subject subject=SecurityUtils.getSubject();
+        //封装用户数据
+        UsernamePasswordToken token=new UsernamePasswordToken(admins.getAdminPhone(),admins.getPassword());
+        try {
+            //验证登录信息
+            subject.login(token);
+            if(subject.isAuthenticated()){// 验证通过
+                //从shiro的session中取出我们保存的对象，该对象在登录认证成功后保存的
+                Object object=subject.getPrincipal();
+                if(object instanceof Admins){
+                    object=(Admins)object;
+                }
+                subject.getSession().setAttribute("admins",object);
+                //Admins a=usersService.adminLogin(admins);//没使用shiro验证时使用的后台登录
+                //request.getSession().setAttribute("admins",a);
+                //验证成功，进入主页
+                return "index";
+            }else {
+                token.clear();
+                return "login";
+            }
+        } catch (UnknownAccountException e) {
+            //登录失败:用户名不存在，UnknownAccountException是Shiro抛出的找不到用户异常
+            System.out.println("无效的用户名！");
+            request.setAttribute("fail","登录账号不存在");
+            return "login";
+            //return "noAuth";
+        }catch (IncorrectCredentialsException e){
+            //登录失败:密码错误，IncorrectCredentialsException是Shiro抛出的密码错误异常
+            System.out.println("密码错误！");
+            request.setAttribute("fail","密码错误，请重试");
+            return "login";
+           // return "noPass";
+        }
+    }
+
+    //管理员登录
+//    @SystemControllerLog(description = "管理员后台登录")
+//    @PostMapping("adminLogin")
+//    public String adminLogin(Admins admins, HttpSession session, Model model){
+//        Admins adm=usersService.adminLogin(admins);
+//        if(adm!=null){
+//            session.setAttribute("admins",adm);
+//            return "index";
+//        }else {
+//            model.addAttribute("fail","账号或密码错误，请重试");
+//            return "login";
+//        }
+//    }
+
     //管理员退出登录
     @SystemControllerLog(description = "管理员退出登录")
     @GetMapping("tologout")

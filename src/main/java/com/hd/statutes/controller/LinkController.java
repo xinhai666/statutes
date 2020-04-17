@@ -95,5 +95,13 @@ public class LinkController {
     public String clauseAdd(){return "clause-add";}
     @RequestMapping("go404")
     public String go404(){ return "404"; }
+    @RequestMapping("noAuth") //无效用户名
+    public String goNoAuth(){
+        return "noAuth";
+    }
+    @RequestMapping("noPass") //密码错误
+    public String goNoPass(){
+        return "noPass";
+    }
 
 }

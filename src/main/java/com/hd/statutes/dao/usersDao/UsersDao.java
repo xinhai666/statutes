@@ -32,4 +32,6 @@ public interface UsersDao {
     Users userLogin(@Param("userPhone") String userPhone,@Param("password") String password);
     //用户注册
     int addUsers(@Param("userName")String userName,@Param("userPhone")String userPhone,@Param("password")String password);
+    //根据登录手机号查管理员
+    Admins findByPhone(@Param("adminPhone") String adminPhone);
 }

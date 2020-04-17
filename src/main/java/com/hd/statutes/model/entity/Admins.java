@@ -15,6 +15,15 @@ public class Admins {
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   @JSONField(format = "yyyy-MM-dd")
   private Date adminCreatetime;
+  private String adminRole;
+
+  public String getAdminRole() {
+    return adminRole;
+  }
+
+  public void setAdminRole(String adminRole) {
+    this.adminRole = adminRole;
+  }
 
   public Integer getAdminId() {
     return adminId;

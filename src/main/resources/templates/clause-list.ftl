@@ -75,7 +75,8 @@
     $(function () {
         getClauses();//加载所有条款
         /*获得所有法规*/
-        $.post('checkStatuteByName',function (data) {
+        $.post('checkStatuteByName',function (results) {
+            var data=results.result;
             if(data!=null){
                 for(var i=0;i<data.length;i++){
                     $("#statuteId").append(

@@ -21,8 +21,8 @@
     </delete>
 
     <insert id="addAdmin" parameterType="com.hd.statutes.model.entity.Admins">
-        insert into admins(admin_phone, admin_name,password, admin_createtime) values
-        (#{adminPhone},#{adminName},#{password},now())
+        insert into admins(admin_phone, admin_name,password, admin_createtime,admin_role) values
+        (#{adminPhone},#{adminName},#{password},now(),#{adminRole})
     </insert>
     <select id="getAllAdmin" resultMap="admins">
         select * from admins
@@ -31,7 +31,7 @@
         delete from admins where admin_id=#{adminId}
     </delete>
     <update id="updateAdmins" parameterType="com.hd.statutes.model.entity.Admins">
-        update admins set admin_name=#{adminName},password=#{password} where admin_phone=#{adminPhone}
+        update admins set admin_name=#{adminName},password=#{password},admin_role=#{adminRole} where admin_phone=#{adminPhone}
     </update>
     <select id="adminLogin" resultMap="admins">
         select * from admins where admin_phone=#{adminPhone} and password=#{password}
@@ -43,13 +43,17 @@
         insert into users(user_name, user_phone, password,user_createtime) VALUES
         (#{userName},#{userPhone},#{password},now())
     </insert>
+    <select id="findByPhone" resultMap="admins">
+        select * from admins where admin_phone=#{adminPhone}
+    </select>
 
-    <resultMap id="admins" type="com.hd.statutes.model.entity.Admins">
+    <resultMap id="admins" type="Admins">
         <id property="adminId" column="admin_id"></id>
         <result property="adminPhone" column="admin_phone"></result>
         <result property="adminName" column="admin_name"></result>
         <result property="password" column="password"></result>
         <result property="adminCreatetime" column="admin_createtime"></result>
+        <result property="adminRole" column="admin_role"></result>
     </resultMap>
 
     <resultMap id="Consults" type="com.hd.statutes.model.entity.Consults">

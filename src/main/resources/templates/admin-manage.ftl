@@ -47,6 +47,14 @@
 							<td>密码：</td>
 							<td><input type="password" id="adPassword" name="password" value="111111"></td>
 						</tr>
+						<tr>
+							<td>类型：</td>
+							<td>
+								<select id="adminRole" name="adminRole" style="width: 143px">
+
+								</select>
+							</td>
+						</tr>
 					</table>
 				</div>
 				<div class="modal-footer">
@@ -64,9 +72,13 @@
 <div class="page-container">
 	<div class="text-c"> 
 		<form id="addAdminForm">
-				*管理员姓名：<input name="adminName" id="adminName" class="input-text" style="width:200px" value="" placeholder="不超过100个字"/>&nbsp;&nbsp;&nbsp;
-				*管理员手机号：<input name="adminPhone" id="adminPhone" class="input-text" style="width:200px" value="" placeholder="不超过100个字"/>&nbsp;&nbsp;&nbsp;
-				*密码：<input name="password" id="password" class="input-text" style="width:200px" value="" placeholder="不超过100个字"/>
+				*管理员姓名：<input name="adminName" id="adminName" class="input-text" style="width:150px" value="" placeholder="不超过100个字"/>&nbsp;&nbsp;&nbsp;
+				*管理员手机号：<input name="adminPhone" id="adminPhone" class="input-text" style="width:150px" value="" placeholder="不超过100个字"/>&nbsp;&nbsp;&nbsp;
+				*密码：<input type="password" name="password" id="password" class="input-text" style="width:150px" value="" placeholder="不超过100个字"/>&nbsp;&nbsp;&nbsp;
+				*类型：<select name="adminRole" class="input-text" style="width:150px">
+							<option value="admin">子管</option>
+							<option value="boss">超管</option>
+					   </select>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="button" class="btn" id="subt" value="新增管理员" width="100px"/>
 		</form>
@@ -78,6 +90,7 @@
 				<th width="60">手机</th>
 				<th width="50">姓名</th>
 				<th width="50">添加日期</th>
+				<th width="50">管理员类型</th>
 				<th width="30">操作</th>
 			</tr>
 		</thead>
@@ -147,10 +160,15 @@
 				dataType: 'json',
 				success:function (data) {
 					for(var i=0;i<data.length;i++){
+						var adminType="子管";
+						if(data[i].adminRole=="boss"){
+							adminType="超管";
+						}
 						$("#admtb").append(
 								"<tr class='text-c'><td >"+data[i].adminPhone+"</td>"
 								+"<td>"+data[i].adminName+"</td>"
 								+"<td >"+data[i].adminCreatetime+"</td>"
+								+"<td >"+adminType+"</td>"
 								+"<td><a data-target='#myModal' data-toggle='modal' href='javascript:;' onclick='admin_up(this," + data[i].adminId + ")'>编辑</a>"
 								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript:;' onclick='admin_del(this," + data[i].adminId + ")'>删除</a>"
 								+ "</td></tr>"
@@ -166,11 +184,24 @@
 
 	/*模态框填值*/
 	function admin_up(obj,adminId) {
+		$("#adminRole").empty();
 		var adminPhone=$(obj).parents("tr").children("td").get(0).innerText;
 		var adminName=$(obj).parents("tr").children("td").get(1).innerText;
+		var adminRole=$(obj).parents("tr").children("td").get(3).innerText;
 		$("#adptd").text(adminPhone);
 		$("#adpinput").val(adminPhone);
 		$("#adName").val(adminName);
+		if(adminRole=="超管") {
+			$("#adminRole").append(
+					'<option value="admin">子管</option>' +
+					'<option value="boss" selected>超管</option>'
+			)
+		}else {
+			$("#adminRole").append(
+					'<option value="admin" selected>子管</option>' +
+					'<option value="boss" >超管</option>'
+			)
+		}
 	}
 	/*保存修改*/
 	$("#submit").click(function () {

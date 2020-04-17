@@ -137,6 +137,7 @@
 
 		/*获得所有法规*/
 		$.post('checkStatuteByName',function (data) {
+			data=data.result;
 			var staId=$("#staId").val();
 			if(data!=null){
 				for(var i=0;i<data.length;i++){
