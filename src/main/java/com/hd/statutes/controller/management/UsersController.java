@@ -50,7 +50,7 @@ public class UsersController {
         request.setAttribute("consults",consults);
         return "consult-show";
     }
-    @SystemControllerLog(description = "删除一条咨询")
+    @SystemControllerLog(description = "根据id删除一条咨询")
     @RequestMapping("/delConsultById")
     @ResponseBody
     public String delConsultById(@RequestParam("consultId") int consultId){
