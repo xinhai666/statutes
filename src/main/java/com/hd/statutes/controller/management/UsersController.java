@@ -64,7 +64,7 @@ public class UsersController {
     @SystemControllerLog(description = "添加管理员")
     @RequestMapping("addAdmin")
     @ResponseBody
-    public String addAdmin(@RequestBody Admins admin){
+    public String addAdmin(Admins admin){
         int num=usersService.addAdmin(admin);
         if(num>0){
             return "true";
